@@ -396,7 +396,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <option value="30">📆 30 Hari ke Depan</option>
       <option value="notset">— Belum Diatur</option>
     </select>
-    <button class="btn btn-success" onclick="openModal('modal-bayar')">💳 Catat Pembayaran</button>
+    <button class="btn btn-success" onclick="openBayarCepat()">⚡ Bayar Cepat</button>
+    <button class="btn btn-ghost btn-sm hide-m" onclick="openModal('modal-bayar')">💳 Bayar Lengkap</button>
     <button class="btn btn-ghost btn-sm no-print hide-m" onclick="printPanel()" title="Cetak">🖨️ Print</button>
   </div>
   <div class="filter-banner" id="banner-belum"></div>
