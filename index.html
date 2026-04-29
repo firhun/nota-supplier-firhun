@@ -185,6 +185,21 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .filter-banner-lbl{font-size:12px;color:var(--text2)}
 .filter-banner-clear{background:transparent;border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;flex-shrink:0;font-weight:500}
 .filter-banner-clear:hover,.filter-banner-clear:active{background:var(--bg3);color:var(--text)}
+
+/* BANK BREAKDOWN dalam banner */
+.fb-bank-breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border)}
+.fb-bank-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:9px 8px;text-align:center;transition:all .15s;min-width:0}
+.fb-bank-card.fb-bca{border-color:rgba(0,82,156,.4);background:linear-gradient(135deg,rgba(0,82,156,.12),rgba(0,82,156,.04))}
+.fb-bank-card.fb-bri{border-color:rgba(0,98,166,.4);background:linear-gradient(135deg,rgba(0,98,166,.12),rgba(0,98,166,.04))}
+.fb-bank-card.fb-bni{border-color:rgba(228,140,30,.4);background:linear-gradient(135deg,rgba(228,140,30,.12),rgba(228,140,30,.04))}
+.fb-bank-card.fb-lain{border-color:rgba(139,150,176,.3);background:linear-gradient(135deg,rgba(139,150,176,.1),rgba(139,150,176,.03))}
+.fb-bank-card.fb-empty{opacity:.45}
+.fb-bank-name{font-size:10px;font-weight:700;letter-spacing:.5px;color:var(--text2);text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fb-bca .fb-bank-name{color:#4a9eff}
+.fb-bri .fb-bank-name{color:#5dadff}
+.fb-bni .fb-bank-name{color:#ffa544}
+.fb-bank-amount{font-size:12.5px;font-weight:700;color:var(--text);margin-top:3px;line-height:1.2;word-break:break-word}
+.fb-bank-count{font-size:9.5px;color:var(--text3);margin-top:2px}
 @keyframes slideIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:640px){
   .filter-banner{padding:10px 12px;margin-bottom:10px}
@@ -193,6 +208,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   .filter-banner-stats{gap:14px}
   .filter-banner-lbl{font-size:11px}
   .filter-banner-clear{padding:5px 10px;font-size:11px}
+  .fb-bank-breakdown{grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px;padding-top:8px}
+  .fb-bank-card{padding:7px 6px}
+  .fb-bank-name{font-size:9.5px;letter-spacing:.4px}
+  .fb-bank-amount{font-size:12px}
+  .fb-bank-count{font-size:9.5px}
 }
 /* FLOATING BACK TO TOP */
 .fab-top{position:fixed;right:14px;bottom:18px;width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:90;transition:opacity .2s,transform .2s;padding-bottom:env(safe-area-inset-bottom,0)}
@@ -362,7 +382,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <div class="header-right">
     <button class="btn btn-ghost btn-sm" onclick="openModal('modal-rek')" title="Cari rekening">🏦 <span class="hide-m">Rekening</span></button>
     <button class="btn btn-ghost btn-sm" onclick="openModal('modal-menu')" title="Menu">⚙️</button>
-    <button class="btn btn-primary btn-sm" onclick="openModal('modal-nota')">+ <span class="hide-m">Nota</span></button>
+    <button class="btn btn-primary btn-sm" onclick="openNotaBaru()">+ <span class="hide-m">Nota</span></button>
   </div>
 </div>
 
@@ -532,10 +552,31 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <div class="form-group"><label class="form-label">Tgl Nota</label><input class="form-input" type="date" id="n-tgl-nota"></div>
         <div class="form-group"><label class="form-label">Jatuh Tempo</label><input class="form-input" type="date" id="n-tgl-tempo"></div>
       </div>
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Nominal (Rp) *</label><input class="form-input" type="number" id="n-nominal" placeholder="0" min="0"></div>
-        <div class="form-group"><label class="form-label">Sisa Hutang (Rp)</label><input class="form-input" type="number" id="n-sisa" placeholder="0 = lunas" min="0"></div>
+      <div class="form-group"><label class="form-label">Nominal Total (Rp) *</label><input class="form-input" type="number" id="n-nominal" placeholder="0" min="0" inputmode="numeric" oninput="nUpdateSisa()"></div>
+      <div class="section-label">Status Pembayaran</div>
+      <div class="bc-mode-grid" style="margin-bottom:12px">
+        <button type="button" class="bc-mode-btn bc-mode-active" id="n-stat-belum" onclick="nSetStatus('belum')">
+          <div class="bc-mode-icon">📋</div>
+          <div class="bc-mode-title">Belum Bayar</div>
+          <div class="bc-mode-sub">Hutang penuh</div>
+        </button>
+        <button type="button" class="bc-mode-btn" id="n-stat-cicil" onclick="nSetStatus('cicil')">
+          <div class="bc-mode-icon">💰</div>
+          <div class="bc-mode-title">Dicicil</div>
+          <div class="bc-mode-sub">Sudah dibayar sebagian</div>
+        </button>
+        <button type="button" class="bc-mode-btn" id="n-stat-lunas" onclick="nSetStatus('lunas')" style="grid-column:span 2">
+          <div class="bc-mode-icon">✅</div>
+          <div class="bc-mode-title">Lunas</div>
+          <div class="bc-mode-sub">Sudah dibayar penuh (catat retroaktif)</div>
+        </button>
       </div>
+      <div class="form-group" id="n-cicil-wrap" style="display:none">
+        <label class="form-label">Sudah Dibayar (Rp)</label>
+        <input class="form-input" type="number" id="n-paid" placeholder="0" min="0" inputmode="numeric" oninput="nUpdateSisa()">
+        <div id="n-sisa-info" style="font-size:12px;color:var(--text2);margin-top:6px"></div>
+      </div>
+      <input type="hidden" id="n-sisa">
       <div class="divider"></div>
       <div class="section-label">Informasi Rekening</div>
       <div class="form-row">
@@ -998,6 +1039,25 @@ function updateFilterBanner(panelId,opts){
   const stats=opts.stats||[];
   const statsHtml=stats.map(s=>`<div class="filter-banner-stat"><span class="filter-banner-num ${s.color||''}">${s.value}</span><span class="filter-banner-lbl">${s.label}</span></div>`).join('');
   const filtersText=opts.activeFilters.join(' · ');
+  // Bank breakdown HTML
+  let bankHtml='';
+  if(opts.bankBreakdown){
+    const b=opts.bankBreakdown;
+    const cell=(cls,name,amount,count,emoji)=>{
+      const empty=count===0?' fb-empty':'';
+      return `<div class="fb-bank-card ${cls}${empty}">
+        <div class="fb-bank-name">${emoji} ${name}</div>
+        <div class="fb-bank-amount">${count>0?fmtRp(amount):'—'}</div>
+        <div class="fb-bank-count">${count} nota</div>
+      </div>`;
+    };
+    bankHtml=`<div class="fb-bank-breakdown">
+      ${cell('fb-bca','BCA',b.bca.amount,b.bca.count,'🟦')}
+      ${cell('fb-bri','BRI',b.bri.amount,b.bri.count,'🟦')}
+      ${cell('fb-bni','BNI',b.bni.amount,b.bni.count,'🟧')}
+      ${cell('fb-lain','Lainnya',b.lain.amount,b.lain.count,'🏦')}
+    </div>`;
+  }
   el.innerHTML=`
     <div class="filter-banner-row">
       <div class="filter-banner-info">
@@ -1008,8 +1068,30 @@ function updateFilterBanner(panelId,opts){
         </div>
       </div>
       <button class="filter-banner-clear" onclick="clearFilters('${panelId}')">✕ Hapus Filter</button>
-    </div>`;
+    </div>
+    ${bankHtml}`;
   el.classList.add('show');
+}
+
+// Helper: hitung breakdown nominal per bank (BCA/BRI/BNI/Lainnya) dari array nota
+function calcBankBreakdown(rows,amountField){
+  const result={
+    bca:{amount:0,count:0},
+    bri:{amount:0,count:0},
+    bni:{amount:0,count:0},
+    lain:{amount:0,count:0}
+  };
+  rows.forEach(r=>{
+    const rek=getRek(r.nama);
+    const bank=(r.bank||rek?.bank||'').toUpperCase().trim();
+    const amt=r[amountField]||0;
+    if(amt<=0)return;
+    if(bank==='BCA'){result.bca.amount+=amt;result.bca.count++}
+    else if(bank==='BRI'){result.bri.amount+=amt;result.bri.count++}
+    else if(bank==='BNI'){result.bni.amount+=amt;result.bni.count++}
+    else {result.lain.amount+=amt;result.lain.count++}
+  });
+  return result;
 }
 
 function clearFilters(panelId){
@@ -1073,7 +1155,9 @@ function renderBelum(){
       {label:'',value:fmtRp(totSisa>0?totSisa:totNominal),color:totSisa>0?'red':'amber'},
     ];
     if(odCount>0)stats.push({label:'jatuh tempo lewat',value:odCount,color:'red'});
-    updateFilterBanner('belum',{icon:'📊',activeFilters:activeF,stats});
+    // Breakdown per bank: pakai sisa hutang (yang harus dibayar)
+    const bankBreakdown=calcBankBreakdown(_fb.filter(r=>!r.lunas&&r.sisa>0),'sisa');
+    updateFilterBanner('belum',{icon:'📊',activeFilters:activeF,stats,bankBreakdown});
   } else updateFilterBanner('belum',null);
   pages.belum=0;renderBelumPage();
 }
@@ -1128,11 +1212,12 @@ function renderBayar(){
   if(activeF.length){
     const tot=_fba.reduce((a,r)=>a+r.nominal,0);
     const suppliers=new Set(_fba.map(r=>r.nama)).size;
+    const bankBreakdown=calcBankBreakdown(_fba,'nominal');
     updateFilterBanner('bayar',{icon:'💸',activeFilters:activeF,stats:[
       {label:'transaksi',value:_fba.length,color:'green'},
       {label:'',value:fmtRp(tot),color:'green'},
       {label:'supplier',value:suppliers,color:''},
-    ]});
+    ],bankBreakdown});
   } else updateFilterBanner('bayar',null);
   pages.bayar=0;renderBayarPage();
 }
@@ -1189,7 +1274,10 @@ function renderSemua(){
       {label:'nominal',value:fmtRp(tot),color:'blue'},
     ];
     if(sisa>0)stats.push({label:'sisa',value:fmtRp(sisa),color:'red'});
-    updateFilterBanner('semua',{icon:'📊',activeFilters:activeF,stats});
+    // Breakdown bank: pakai sisa kalau ada, kalau lunas pakai nominal
+    const bankRows=_fs.filter(r=>r.sisa>0||!r.lunas);
+    const bankBreakdown=calcBankBreakdown(bankRows.length?bankRows:_fs,sisa>0?'sisa':'nominal');
+    updateFilterBanner('semua',{icon:'📊',activeFilters:activeF,stats,bankBreakdown});
   } else updateFilterBanner('semua',null);
   pages.semua=0;renderSemuaPage();
 }
@@ -1327,29 +1415,90 @@ document.querySelectorAll('.modal-backdrop').forEach(el=>{
 });
 
 // ===== SUBMIT NOTA BARU =====
+let nStatus='belum'; // belum / cicil / lunas
+
+function openNotaBaru(){
+  // Reset form
+  ['n-nama','n-tgl-tempo','n-nominal','n-paid','n-norek','n-namarek'].forEach(i=>{const el=document.getElementById(i);if(el)el.value=''});
+  document.getElementById('n-tgl-nota').value=today();
+  document.getElementById('n-bank').value='';
+  document.getElementById('n-area').value='SALES';
+  document.getElementById('n-rek-preview').style.display='none';
+  document.getElementById('n-sisa-info').innerHTML='';
+  nSetStatus('belum');
+  openModal('modal-nota');
+}
+
+function nSetStatus(s){
+  nStatus=s;
+  document.getElementById('n-stat-belum').classList.toggle('bc-mode-active',s==='belum');
+  document.getElementById('n-stat-cicil').classList.toggle('bc-mode-active',s==='cicil');
+  document.getElementById('n-stat-lunas').classList.toggle('bc-mode-active',s==='lunas');
+  document.getElementById('n-cicil-wrap').style.display=s==='cicil'?'':'none';
+  if(s==='cicil')setTimeout(()=>document.getElementById('n-paid').focus(),100);
+  nUpdateSisa();
+}
+
+function nUpdateSisa(){
+  const nominal=parseFloat(document.getElementById('n-nominal').value)||0;
+  const paid=parseFloat(document.getElementById('n-paid').value)||0;
+  const info=document.getElementById('n-sisa-info');
+  let sisa=0;
+  if(nStatus==='lunas')sisa=0;
+  else if(nStatus==='belum')sisa=nominal;
+  else { // cicil
+    sisa=Math.max(0,nominal-paid);
+    if(nominal>0&&info){
+      if(paid<=0)info.innerHTML='<span style="color:var(--text2)">Masukkan jumlah yang sudah dibayar</span>';
+      else if(paid>=nominal)info.innerHTML=`<span style="color:var(--green)">✓ Akan dianggap LUNAS (Rp 0 sisa)</span>`;
+      else info.innerHTML=`💡 Sisa hutang: <strong style="color:var(--red)">${fmtRp(sisa)}</strong>`;
+    } else if(info)info.innerHTML='';
+  }
+  document.getElementById('n-sisa').value=sisa;
+}
+
 function submitNota(){
   const nama=document.getElementById('n-nama').value.trim().toUpperCase();
   const nominal=parseFloat(document.getElementById('n-nominal').value)||0;
   if(!nama){toast('Nama supplier wajib diisi','error');return}
-  if(!nominal){toast('Nominal wajib diisi','error');return}
-  const sisa=parseFloat(document.getElementById('n-sisa').value)||0;
+  if(!nominal){toast('Nominal total wajib diisi','error');return}
+  // Tentukan sisa berdasarkan status
+  let sisa=nominal;
+  let paidAmount=0;
+  if(nStatus==='lunas'){sisa=0;paidAmount=nominal}
+  else if(nStatus==='cicil'){
+    paidAmount=parseFloat(document.getElementById('n-paid').value)||0;
+    if(paidAmount<=0){toast('Masukkan jumlah yang sudah dibayar','error');return}
+    if(paidAmount>nominal){toast('Pembayaran tidak boleh lebih dari nominal','error');return}
+    sisa=nominal-paidAmount;
+  }
   const bank=document.getElementById('n-bank').value;
   const norek=document.getElementById('n-norek').value;
   const namarek=document.getElementById('n-namarek').value;
-  // Update rekMap if ada info rekening baru
   if(norek){rekMap[nama]={bank,no_rek:norek,nama_rek:namarek}}
   const rec={id:uid(),area:document.getElementById('n-area').value,nama,
     tgl_nota:document.getElementById('n-tgl-nota').value||today(),
     tgl_tempo:document.getElementById('n-tgl-tempo').value||null,
     nominal,sisa,bank,no_rek:norek,nama_rek:namarek,lunas:sisa===0};
   nota.unshift(rec);
-  ['n-nama','n-tgl-nota','n-tgl-tempo','n-nominal','n-sisa','n-norek','n-namarek'].forEach(i=>document.getElementById(i).value='');
+  // Kalau ada pembayaran (cicil/lunas), catat juga ke paid history
+  if(paidAmount>0){
+    const tgl=rec.tgl_nota;
+    paid.unshift({id:uid(),week:autoWeekLabel(tgl),tgl_nota:tgl,nama,nominal:paidAmount,no_rek:norek,nama_rek:namarek});
+  }
+  ['n-nama','n-tgl-nota','n-tgl-tempo','n-nominal','n-paid','n-norek','n-namarek'].forEach(i=>{const el=document.getElementById(i);if(el)el.value=''});
   document.getElementById('n-bank').value='';
   document.getElementById('n-rek-preview').style.display='none';
+  document.getElementById('n-sisa-info').innerHTML='';
+  nSetStatus('belum'); // reset ke default
   closeModal('modal-nota');
   updateDataLists();renderStatsBelum();renderBelum();
+  if(paidAmount>0){initWeekFilter();renderStatsBayar();renderBayar()}
+  renderStatsSemua();renderSemua();
   saveData();
-  toast('Nota baru berhasil disimpan ✓','success');
+  if(nStatus==='lunas')toast(`✓ Nota ${nama} (lunas) berhasil disimpan`,'success');
+  else if(paidAmount>0)toast(`✓ Nota ${nama} disimpan — sisa ${fmtRp(sisa)}`,'success');
+  else toast('Nota baru berhasil disimpan ✓','success');
 }
 
 // ===== SUBMIT BAYAR =====
