@@ -76,6 +76,11 @@ body.theme-light{
   .filter-banner-num.red{color:#a82020!important}
   .filter-banner-num.green{color:#0a6e3f!important}
   .fb-bank-card{background:#fff!important;border:1px solid #999!important}
+  /* Rencana panel: input number tampak seperti text biasa */
+  .rencana-amount-input{border:none!important;background:transparent!important;padding:0!important;font-family:inherit!important;font-weight:700!important;color:#000!important;width:auto!important;text-align:right!important}
+  .rencana-amount-input::-webkit-inner-spin-button,.rencana-amount-input::-webkit-outer-spin-button{display:none!important}
+  .rencana-quick,.rencana-row-aksi{display:none!important}
+  .rencana-amount-input.adjusted{color:#a85e00!important;font-style:italic}
   .fb-bca .fb-bank-name{color:#0048a8!important}
   .fb-bri .fb-bank-name{color:#005099!important}
   .fb-bni .fb-bank-name{color:#a85e00!important}
@@ -109,9 +114,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .header-right{display:flex;gap:6px;flex-shrink:0}
 .nav{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;padding:0 16px;overflow-x:auto;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
-.nav-tab{padding:12px 14px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s}
+.nav-tab{padding:12px 14px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
 .nav-tab.active{color:var(--blue);border-bottom-color:var(--blue)}
 .nav-tab:hover:not(.active){color:var(--text)}
+.rencana-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--green);color:#fff;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;min-width:18px;line-height:1.4}
+.rencana-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.rencana-amount-input{background:var(--bg3);border:1.5px solid var(--blue);color:var(--text);border-radius:6px;padding:5px 8px;font-size:13px;font-weight:600;font-family:var(--mono);width:130px;outline:none;text-align:right}
+.rencana-amount-input:focus{border-color:var(--green);background:var(--green-bg)}
+.rencana-amount-input.adjusted{color:var(--amber);border-color:var(--amber)}
+.rencana-row-aksi{display:flex;gap:4px;align-items:center;justify-content:flex-end}
+.rencana-quick{background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:5px;padding:3px 7px;font-size:10.5px;cursor:pointer;font-family:inherit}
+.rencana-quick:hover,.rencana-quick:active{background:var(--bg3);color:var(--text);border-color:var(--text2)}
+.rencana-quick.lunas{color:var(--green);border-color:var(--green)}
+@media(max-width:640px){
+  .rencana-stats{grid-template-columns:repeat(2,1fr);gap:8px}
+  .rencana-amount-input{width:100%}
+}
 .panel{display:none;padding:16px;max-width:1280px;margin:0 auto}
 .panel.active{display:block}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
@@ -254,6 +272,67 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .filter-banner-lbl{font-size:12px;color:var(--text2)}
 .filter-banner-clear{background:transparent;border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;flex-shrink:0;font-weight:500}
 .filter-banner-clear:hover,.filter-banner-clear:active{background:var(--bg3);color:var(--text)}
+
+/* LAPORAN SETORAN */
+.laporan-doc{padding:24px 28px;font-family:var(--font);color:#1a2332;background:#fff;font-size:13px;line-height:1.5}
+.laporan-doc h1{font-size:20px;font-weight:700;margin-bottom:4px;color:#0f1117}
+.laporan-doc h2{font-size:13px;font-weight:600;margin:16px 0 8px;text-transform:uppercase;letter-spacing:.6px;color:#1d6ddc;border-bottom:1.5px solid #d8dee8;padding-bottom:4px}
+.laporan-meta{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:6px;padding-bottom:14px;border-bottom:2px solid #1a2332}
+.laporan-meta-item{font-size:12px}
+.laporan-meta-item .lbl{color:#5b6478;font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;font-weight:600}
+.laporan-meta-item .val{font-weight:600;color:#1a2332;font-size:13px}
+.laporan-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 8px}
+.laporan-sum-card{background:#f4f6fb;border:1px solid #d8dee8;border-radius:6px;padding:8px 10px;text-align:center}
+.laporan-sum-card.tot{background:#e6efff;border-color:#1d6ddc}
+.laporan-sum-card .lbl{font-size:9.5px;color:#5b6478;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.laporan-sum-card .val{font-size:14px;font-weight:700;color:#1a2332;margin-top:3px}
+.laporan-sum-card.tot .val{color:#0a6e3f}
+.laporan-tbl{width:100%;border-collapse:collapse;margin-top:6px;font-size:11.5px}
+.laporan-tbl th{background:#eef2f7;padding:6px 8px;text-align:left;border-bottom:1.5px solid #999;color:#1a2332;font-size:10px;text-transform:uppercase;letter-spacing:.4px;font-weight:700}
+.laporan-tbl td{padding:7px 8px;border-bottom:1px solid #d8dee8;color:#1a2332}
+.laporan-tbl tr:last-child td{border-bottom:1.5px solid #999}
+.laporan-tbl .right{text-align:right;font-family:var(--mono);white-space:nowrap}
+.laporan-tbl .center{text-align:center}
+.laporan-bank-section{margin-top:14px;page-break-inside:avoid}
+.laporan-bank-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;padding:6px 10px;background:#f4f6fb;border-radius:4px;border-left:3px solid #1d6ddc}
+.laporan-bank-header.bca{border-left-color:#0048a8;background:#e6efff}
+.laporan-bank-header.bri{border-left-color:#005099;background:#e6f0fa}
+.laporan-bank-header.bni{border-left-color:#a85e00;background:#fdf4dd}
+.laporan-bank-header.lain{border-left-color:#5b6478;background:#eef2f7}
+.laporan-bank-name{font-size:13px;font-weight:700;letter-spacing:.4px}
+.laporan-bank-tot{font-size:13px;font-weight:700;color:#0a6e3f;font-family:var(--mono)}
+.laporan-grand-total{margin-top:14px;padding:12px 14px;background:#0a6e3f;color:#fff;border-radius:6px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:15px}
+.laporan-grand-total .val{font-family:var(--mono);font-size:18px}
+.laporan-footer{margin-top:24px;padding-top:14px;border-top:1px solid #d8dee8;font-size:10.5px;color:#5b6478;text-align:center;font-style:italic}
+.laporan-sig{margin-top:30px;display:grid;grid-template-columns:1fr 1fr;gap:50px;font-size:11px}
+.laporan-sig-block{text-align:center}
+.laporan-sig-line{border-top:1px solid #1a2332;margin-top:50px;padding-top:5px;font-weight:600}
+
+/* MODAL laporan: body padding 0 supaya laporan-doc kelola sendiri */
+#modal-laporan .modal-body{padding:0!important;background:#fff}
+#modal-laporan .modal{background:var(--bg2)}
+
+/* PRINT MODE khusus laporan: hanya laporan yang keprint */
+@media print{
+  body.printing-laporan > *:not(.modal-backdrop){display:none!important}
+  body.printing-laporan .modal-backdrop:not(#modal-laporan){display:none!important}
+  body.printing-laporan #modal-laporan{position:static!important;background:#fff!important;display:block!important}
+  body.printing-laporan #modal-laporan .modal{max-width:100%!important;border-radius:0!important;box-shadow:none!important;background:#fff!important;border:none!important}
+  body.printing-laporan #modal-laporan .modal-header,body.printing-laporan #modal-laporan .modal-footer{display:none!important}
+  body.printing-laporan .laporan-doc{padding:8px 0!important}
+  body.printing-laporan .laporan-bank-section{page-break-inside:avoid}
+  body.printing-laporan .laporan-tbl tr{page-break-inside:avoid}
+}
+@media(max-width:640px){
+  .laporan-doc{padding:16px 14px;font-size:12px}
+  .laporan-doc h1{font-size:17px}
+  .laporan-summary{grid-template-columns:repeat(2,1fr)}
+  .laporan-tbl{font-size:10.5px}
+  .laporan-tbl th,.laporan-tbl td{padding:5px 6px}
+  .laporan-meta{gap:10px}
+  .laporan-grand-total{font-size:13px}
+  .laporan-grand-total .val{font-size:15px}
+}
 
 /* BANK BREAKDOWN dalam banner */
 .fb-bank-breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border)}
@@ -458,6 +537,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
 <div class="nav">
   <div class="nav-tab active" onclick="switchPanel('belum',this)">📋 Belum Bayar</div>
+  <div class="nav-tab" onclick="switchPanel('rencana',this)">💰 Rencana Transfer <span class="rencana-badge" id="rencana-badge" style="display:none">0</span></div>
   <div class="nav-tab" onclick="switchPanel('bayar',this)">✅ Transfer Mingguan</div>
   <div class="nav-tab" onclick="switchPanel('semua',this)">📊 Semua Nota</div>
   <div class="nav-tab" onclick="switchPanel('rekening',this)">🏦 Data Rekening</div>
@@ -493,6 +573,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <input type="date" class="inp" id="f-tempo-to" onchange="renderBelum()" style="width:140px" title="Sampai tanggal">
     </div>
     <button class="btn btn-success" onclick="openBayarCepat()">⚡ Bayar Cepat</button>
+    <button class="btn btn-primary" onclick="rencanaSyncFromFilter()" title="Buat rencana transfer dari filter aktif">💰 Buat Rencana</button>
     <button class="btn btn-ghost btn-sm hide-m" onclick="openModal('modal-bayar')">💳 Bayar Lengkap</button>
     <button class="btn btn-ghost btn-sm no-print hide-m" onclick="printPanel()" title="Cetak">🖨️ Print</button>
   </div>
@@ -514,6 +595,57 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <button class="btn btn-ghost btn-sm" onclick="pagGo('belum',-1)" id="prev-belum">← Prev</button>
     <button class="btn btn-ghost btn-sm" onclick="pagGo('belum',1)" id="next-belum">Next →</button>
   </div></div>
+</div>
+
+<!-- PANEL RENCANA TRANSFER -->
+<div class="panel" id="panel-rencana">
+  <div class="print-header" id="ph-rencana">
+    <h2>Rencana Transfer Supplier</h2>
+    <p id="ph-rencana-sub"></p>
+  </div>
+  <div class="info-box" id="rencana-info">💡 Daftar nota di sini <strong>otomatis ikut filter di tab Belum Bayar</strong>. Anda bisa adjust nominal per nota (untuk cicil), tombol cepat <strong>Lunas / ½ / 0</strong>, atau hapus dari draft. Setelah final, klik <strong>"✅ Catat Semua sebagai Transfer"</strong>.</div>
+
+  <div class="rencana-stats" id="rencana-stats" style="display:none">
+    <div class="stat"><div class="stat-label">Total Nota di Draft</div><div class="stat-val blue" id="rs-count">0</div></div>
+    <div class="stat"><div class="stat-label">Total Akan Ditransfer</div><div class="stat-val green" id="rs-total">Rp 0</div></div>
+    <div class="stat"><div class="stat-label">Total Sisa (jika cicil)</div><div class="stat-val amber" id="rs-sisa">Rp 0</div></div>
+    <div class="stat"><div class="stat-label">Periode Minggu</div><div class="stat-val" style="font-size:14px" id="rs-week">—</div></div>
+  </div>
+
+  <div class="filter-banner" id="banner-rencana"></div>
+
+  <div class="controls" style="margin-top:10px;flex-wrap:wrap">
+    <input type="text" class="inp inp-search" id="q-rencana" placeholder="🔍 Cari nama supplier di draft..." oninput="renderRencana()" style="flex:1;min-width:180px">
+    <button class="btn btn-primary btn-sm" onclick="rencanaSyncFromFilter()" title="Reset draft ke filter Belum Bayar (hapus adjust manual)">🔄 Reset</button>
+    <button class="btn btn-ghost btn-sm" onclick="rencanaClear()">🗑️ Kosongkan</button>
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+      <label style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px">📅 Tgl Setor:</label>
+      <input type="date" class="inp" id="rencana-tgl" onchange="rencanaUpdateStats()" style="width:150px">
+    </div>
+    <span style="flex:1"></span>
+    <button class="btn btn-ghost btn-sm no-print" onclick="rencanaPrint()" title="Print draft rencana">🖨️ Print Draft</button>
+    <button class="btn btn-ghost" onclick="rencanaShowReport()" id="btn-lihat-laporan">📄 Lihat Laporan Setoran</button>
+    <button class="btn btn-success" onclick="rencanaFinalize()" id="rencana-finalize">✅ Catat Semua sebagai Transfer</button>
+  </div>
+
+  <div class="table-wrap tbl-container" id="rencana-table-wrap">
+    <table class="tbl tbl-mobile-cards">
+      <thead><tr>
+        <th>Supplier</th>
+        <th class="hide-m">Tempo</th>
+        <th>Sisa Hutang</th>
+        <th>Akan Bayar</th>
+        <th class="hide-m">Bank/Rek</th>
+        <th>Aksi</th>
+      </tr></thead>
+      <tbody id="tbody-rencana"></tbody>
+    </table>
+  </div>
+  <div id="rencana-empty" class="bc-empty" style="display:none;background:var(--bg2);border:1px dashed var(--border);border-radius:10px;padding:40px 20px">
+    📭 <strong>Draft kosong</strong><br><br>
+    Buka tab <strong>"📋 Belum Bayar"</strong> dan pilih filter (misal "🔔 7 Hari ke Depan" atau "📅 Pilih Tanggal").<br>
+    Begitu filter aktif, daftar nota akan otomatis muncul di sini. ✨
+  </div>
 </div>
 
 <!-- PANEL TRANSFER MINGGUAN -->
@@ -716,6 +848,23 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <!-- MODAL BAYAR CEPAT (SIMPEL) -->
+<!-- MODAL LAPORAN SETORAN -->
+<div class="modal-backdrop" id="modal-laporan">
+  <div class="modal" style="max-width:760px">
+    <div class="modal-header">
+      <div class="modal-title">📄 Laporan Setoran ke Bank</div>
+      <button class="btn-icon" onclick="closeModal('modal-laporan')">✕</button>
+    </div>
+    <div class="modal-body" id="laporan-body" style="background:#fff;color:#1a2332;padding:0">
+      <!-- Diisi via JS -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-laporan')">Tutup</button>
+      <button class="btn btn-primary" onclick="laporanPrint()">🖨️ Print / Save PDF</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="modal-bayar-cepat">
   <div class="modal" style="max-width:480px">
     <div class="modal-header">
@@ -1047,6 +1196,586 @@ function switchPanel(p,el){
   if(p==='bayar'){renderStatsBayar();renderBayar()}
   if(p==='semua'){renderStatsSemua();renderSemua()}
   if(p==='rekening'){renderStatsRek();renderRekening()}
+  if(p==='rencana'){
+    // Set tanggal default ke hari ini kalau belum di-set
+    const tglEl=document.getElementById('rencana-tgl');
+    if(tglEl&&!tglEl.value)tglEl.value=today();
+    renderRencana();
+  }
+}
+
+// ===== RENCANA TRANSFER =====
+let rencanaDraft=[]; // [{notaId, nama, sisa, akanBayar, tgl_tempo, area, bank, no_rek, nama_rek}]
+
+// Auto-sync draft Rencana Transfer dengan filter Belum Bayar
+// Hanya sync kalau draft belum ada / belum di-adjust manual
+let rencanaIsAutoSynced=true; // true = draft cermin filter; false = user sudah adjust manual
+
+function rencanaAutoSync(){
+  // Skip kalau user sudah adjust manual (jangan overwrite kerjaannya)
+  if(!rencanaIsAutoSynced&&rencanaDraft.length>0)return;
+  if(!_fb)return;
+  const eligible=_fb.filter(r=>!r.lunas&&r.sisa>0);
+  if(eligible.length===0){
+    // Filter kosong → kosongkan draft auto
+    if(rencanaIsAutoSynced){
+      rencanaDraft=[];
+      // Re-render rencana panel kalau sedang aktif
+      const panelRencana=document.getElementById('panel-rencana');
+      if(panelRencana&&panelRencana.classList.contains('active'))renderRencana();
+      updateRencanaBadge();
+    }
+    return;
+  }
+  // Build draft baru — semua pakai default lunas
+  rencanaDraft=eligible.map(r=>{
+    const rek=getRek(r.nama);
+    return {
+      notaId:r.id,
+      nama:r.nama,
+      area:r.area,
+      sisa:r.sisa,
+      akanBayar:r.sisa, // default lunas
+      tgl_tempo:r.tgl_tempo,
+      bank:r.bank||rek?.bank||'',
+      no_rek:r.no_rek||rek?.no_rek||'',
+      nama_rek:r.nama_rek||rek?.nama_rek||'',
+    };
+  });
+  rencanaIsAutoSynced=true;
+
+  // Auto-set tanggal setor dari filter
+  const tempoFilter=document.getElementById('f-tempo')?.value||'';
+  const tempoFrom=document.getElementById('f-tempo-from')?.value||'';
+  const tglEl=document.getElementById('rencana-tgl');
+  let suggestedTgl=null;
+  if(tempoFilter==='custom'&&tempoFrom){
+    suggestedTgl=tempoFrom;
+  } else {
+    const tgls=eligible.map(r=>r.tgl_tempo).filter(t=>t&&/^\d{4}-\d{2}-\d{2}$/.test(t)).sort();
+    if(tgls.length>0)suggestedTgl=tgls[0];
+  }
+  if(tglEl&&suggestedTgl)tglEl.value=suggestedTgl;
+  else if(tglEl&&!tglEl.value)tglEl.value=today();
+
+  updateRencanaBadge();
+  // Re-render kalau panel rencana lagi aktif
+  const panelRencana=document.getElementById('panel-rencana');
+  if(panelRencana&&panelRencana.classList.contains('active'))renderRencana();
+}
+
+function rencanaSyncFromFilter(){
+  // Ambil dari _fb (filtered nota di tab Belum Bayar)
+  if(!_fb||_fb.length===0){
+    // Belum render belum, lakukan dulu
+    if(typeof renderBelum==='function')renderBelum();
+  }
+  if(!_fb||_fb.length===0){
+    toast('Tidak ada nota dari filter. Buka tab Belum Bayar dulu, pilih filter','info');
+    return;
+  }
+  const eligible=_fb.filter(r=>!r.lunas&&r.sisa>0);
+  if(eligible.length===0){
+    toast('Tidak ada nota dengan sisa hutang di filter aktif','info');
+    return;
+  }
+  // Build draft, merge dengan yang sudah ada (jangan overwrite kalau user sudah adjust)
+  const existingMap={};
+  rencanaDraft.forEach(d=>{existingMap[d.notaId]=d});
+  rencanaDraft=eligible.map(r=>{
+    const existing=existingMap[r.id];
+    const rek=getRek(r.nama);
+    return {
+      notaId:r.id,
+      nama:r.nama,
+      area:r.area,
+      sisa:r.sisa,
+      akanBayar:existing?existing.akanBayar:r.sisa, // default: bayar lunas
+      tgl_tempo:r.tgl_tempo,
+      bank:r.bank||rek?.bank||'',
+      no_rek:r.no_rek||rek?.no_rek||'',
+      nama_rek:r.nama_rek||rek?.nama_rek||'',
+    };
+  });
+
+  // ===== AUTO-SET TANGGAL SETOR DARI FILTER BELUM BAYAR =====
+  const tempoFilter=document.getElementById('f-tempo')?.value||'';
+  const tempoFrom=document.getElementById('f-tempo-from')?.value||'';
+  let suggestedTgl=null;
+  let sumber='';
+
+  if(tempoFilter==='custom'&&tempoFrom){
+    // Kalau pakai filter rentang tanggal, ambil tanggal "Dari"
+    suggestedTgl=tempoFrom;
+    sumber=`rentang filter (mulai ${fmtDate(tempoFrom)})`;
+  } else {
+    // Kalau filter lain: ambil jatuh tempo paling awal dari nota di filter
+    const tgls=eligible.map(r=>r.tgl_tempo).filter(t=>t&&/^\d{4}-\d{2}-\d{2}$/.test(t)).sort();
+    if(tgls.length>0){
+      suggestedTgl=tgls[0];
+      sumber=`jatuh tempo paling awal (${fmtDate(tgls[0])})`;
+    }
+  }
+
+  // Apply ke input tanggal di tab Rencana
+  const tglEl=document.getElementById('rencana-tgl');
+  if(tglEl&&suggestedTgl){
+    tglEl.value=suggestedTgl;
+  } else if(tglEl&&!tglEl.value){
+    tglEl.value=today();
+  }
+
+  renderRencana();
+  updateRencanaBadge();
+  rencanaIsAutoSynced=true; // anggap sebagai auto-sync, bisa diupdate lagi nanti
+  // Pindah otomatis ke tab Rencana Transfer biar user langsung lihat hasilnya
+  setTimeout(()=>{
+    const rencanaTab=document.querySelectorAll('.nav-tab')[1];
+    if(rencanaTab&&!rencanaTab.classList.contains('active'))rencanaTab.click();
+  },100);
+
+  if(sumber){
+    toast(`✓ ${rencanaDraft.length} nota dimuat · Tgl setor: ${fmtDate(suggestedTgl)} (dari ${sumber})`,'success');
+  } else {
+    toast(`✓ ${rencanaDraft.length} nota dimuat ke draft`,'success');
+  }
+}
+
+function rencanaClear(){
+  if(rencanaDraft.length===0)return;
+  if(!confirm(`Yakin kosongkan draft? ${rencanaDraft.length} nota akan dihapus dari rencana.`))return;
+  rencanaDraft=[];
+  rencanaIsAutoSynced=true; // reset, biar bisa auto-sync lagi nanti
+  renderRencana();
+  updateRencanaBadge();
+  toast('Draft dikosongkan','info');
+}
+
+function rencanaRemove(notaId){
+  rencanaDraft=rencanaDraft.filter(d=>d.notaId!==notaId);
+  rencanaIsAutoSynced=false; // user manual edit
+  renderRencana();
+  updateRencanaBadge();
+}
+
+// Validasi & cleanup draft tanpa render full panel
+// Dipanggil setelah operasi yang ubah data nota (Bayar Cepat, dll)
+function cleanupRencanaDraft(){
+  if(!rencanaDraft||rencanaDraft.length===0){updateRencanaBadge();return}
+  rencanaDraft=rencanaDraft.filter(d=>{
+    const r=nota.find(n=>n.id===d.notaId);
+    if(!r)return false;
+    if(r.lunas||r.sisa<=0)return false;
+    if(d.sisa!==r.sisa){
+      d.sisa=r.sisa;
+      if(d.akanBayar>r.sisa)d.akanBayar=r.sisa;
+    }
+    return true;
+  });
+  updateRencanaBadge();
+  // Re-render kalau panel rencana lagi aktif
+  const panelRencana=document.getElementById('panel-rencana');
+  if(panelRencana&&panelRencana.classList.contains('active'))renderRencana();
+}
+
+function rencanaSetAmount(notaId,val,inputEl){
+  const d=rencanaDraft.find(x=>x.notaId===notaId);
+  if(!d)return;
+  let v=parseFloat(val)||0;
+  if(v<0)v=0;
+  if(v>d.sisa){
+    v=d.sisa;
+    // Update value visual kalau user input lebih dari sisa
+    if(inputEl)inputEl.value=v;
+  }
+  d.akanBayar=v;
+  rencanaIsAutoSynced=false; // user manual edit
+  // Update visual class adjusted di input ini saja (jangan re-render)
+  if(inputEl){
+    if(v!==d.sisa)inputEl.classList.add('adjusted');
+    else inputEl.classList.remove('adjusted');
+    // Update badge status di row yang sama
+    const row=inputEl.closest('tr');
+    if(row){
+      const statusEl=row.querySelector('.row-status');
+      if(statusEl){
+        if(v===0)statusEl.innerHTML='<span class="badge badge-gray">Skip</span>';
+        else if(v===d.sisa)statusEl.innerHTML='<span class="badge badge-green">Lunas</span>';
+        else statusEl.innerHTML='<span class="badge badge-amber">Cicil</span>';
+      }
+    }
+  }
+  // Update stats di atas (TIDAK re-render tabel)
+  rencanaUpdateStats();
+}
+
+function rencanaQuickSet(notaId,mode){
+  const d=rencanaDraft.find(x=>x.notaId===notaId);
+  if(!d)return;
+  if(mode==='lunas')d.akanBayar=d.sisa;
+  else if(mode==='half')d.akanBayar=Math.round(d.sisa/2);
+  else if(mode==='zero')d.akanBayar=0;
+  rencanaIsAutoSynced=false; // user manual edit
+  // Update input value & visual in-place
+  const inputEl=document.querySelector(`input[data-input-id="${notaId}"]`);
+  if(inputEl){
+    inputEl.value=d.akanBayar;
+    if(d.akanBayar!==d.sisa)inputEl.classList.add('adjusted');
+    else inputEl.classList.remove('adjusted');
+    const row=inputEl.closest('tr');
+    if(row){
+      const statusEl=row.querySelector('.row-status');
+      if(statusEl){
+        if(d.akanBayar===0)statusEl.innerHTML='<span class="badge badge-gray">Skip</span>';
+        else if(d.akanBayar===d.sisa)statusEl.innerHTML='<span class="badge badge-green">Lunas</span>';
+        else statusEl.innerHTML='<span class="badge badge-amber">Cicil</span>';
+      }
+    }
+  }
+  rencanaUpdateStats();
+}
+
+function updateRencanaBadge(){
+  const badge=document.getElementById('rencana-badge');
+  if(!badge)return;
+  if(rencanaDraft.length>0){
+    badge.style.display='';
+    badge.textContent=rencanaDraft.length;
+  } else badge.style.display='none';
+}
+
+function getRencanaTgl(){
+  const el=document.getElementById('rencana-tgl');
+  return (el&&el.value)||today();
+}
+
+// Helper: baca filter aktif dari tab Belum Bayar dan format ke array label
+function getBelumActiveFilters(){
+  const filters=[];
+  const q=document.getElementById('q-belum')?.value||'';
+  const area=document.getElementById('f-area')?.value||'';
+  const status=document.getElementById('f-status')?.value||'';
+  const tempo=document.getElementById('f-tempo')?.value||'';
+  const tFrom=document.getElementById('f-tempo-from')?.value||'';
+  const tTo=document.getElementById('f-tempo-to')?.value||'';
+  if(q)filters.push(`Cari: "${q}"`);
+  if(area)filters.push(`Area: ${area}`);
+  if(status==='sisa')filters.push('Status: Ada Sisa');
+  else if(status==='semua')filters.push('Status: Semua');
+  if(tempo){
+    const lblMap={'overdue':'⚠️ Sudah Lewat','today':'📅 Hari Ini','7':'🔔 7 Hari ke Depan','30':'📆 30 Hari ke Depan','notset':'Belum Diatur'};
+    if(tempo==='custom'){
+      let lbl='Tempo: ';
+      if(tFrom&&tTo)lbl+=`${fmtDate(tFrom)} s/d ${fmtDate(tTo)}`;
+      else if(tFrom)lbl+=`Dari ${fmtDate(tFrom)}`;
+      else if(tTo)lbl+=`Sampai ${fmtDate(tTo)}`;
+      else lbl+='Pilih tanggal...';
+      filters.push(lbl);
+    } else {
+      filters.push('Tempo: '+(lblMap[tempo]||tempo));
+    }
+  }
+  return filters;
+}
+
+function rencanaUpdateStats(){
+  const total=rencanaDraft.reduce((a,d)=>a+(d.akanBayar||0),0);
+  const sisaUnpaid=rencanaDraft.reduce((a,d)=>a+Math.max(0,d.sisa-d.akanBayar),0);
+  const tgl=getRencanaTgl();
+  const week=autoWeekLabel(tgl);
+  document.getElementById('rs-count').textContent=rencanaDraft.length;
+  document.getElementById('rs-total').textContent=fmtRp(total);
+  document.getElementById('rs-sisa').textContent=fmtRp(sisaUnpaid);
+  document.getElementById('rs-week').textContent=week;
+  // Bank breakdown
+  const rows=rencanaDraft.filter(d=>d.akanBayar>0);
+  const bankBreakdown=calcBankBreakdownFromRencana(rows);
+  if(rows.length>0){
+    const activeFilters=[];
+    if(rencanaIsAutoSynced){
+      // Auto mode: ikut filter Belum Bayar
+      const belumFilters=getBelumActiveFilters();
+      if(belumFilters.length>0)activeFilters.push(...belumFilters);
+    } else {
+      // Manual mode: tampilkan indikator
+      activeFilters.push('📌 Mode Manual (sudah di-adjust)');
+    }
+    activeFilters.push(`📅 Setor: ${fmtDate(tgl)}`);
+    updateFilterBanner('rencana',{
+      icon:'💰',
+      activeFilters,
+      stats:[
+        {label:'nota akan ditransfer',value:rows.length,color:'green'},
+        {label:'',value:fmtRp(total),color:'green'},
+      ],
+      bankBreakdown
+    });
+  } else updateFilterBanner('rencana',null);
+}
+
+// Helper khusus rencana: bank breakdown dari draft items (bukan dari nota)
+function calcBankBreakdownFromRencana(rows){
+  const result={
+    bca:{amount:0,count:0},bri:{amount:0,count:0},
+    bni:{amount:0,count:0},lain:{amount:0,count:0}
+  };
+  rows.forEach(d=>{
+    const bank=(d.bank||'').toUpperCase().trim();
+    const amt=d.akanBayar||0;
+    if(amt<=0)return;
+    if(bank==='BCA'){result.bca.amount+=amt;result.bca.count++}
+    else if(bank==='BRI'){result.bri.amount+=amt;result.bri.count++}
+    else if(bank==='BNI'){result.bni.amount+=amt;result.bni.count++}
+    else {result.lain.amount+=amt;result.lain.count++}
+  });
+  return result;
+}
+
+function renderRencana(){
+  const tb=document.getElementById('tbody-rencana');
+  const empty=document.getElementById('rencana-empty');
+  const wrap=document.getElementById('rencana-table-wrap');
+  const stats=document.getElementById('rencana-stats');
+  const finalizeBtn=document.getElementById('rencana-finalize');
+  // Validasi: hapus item yang nota-nya sudah lunas atau ID sudah tidak ada (mungkin nota dihapus)
+  rencanaDraft=rencanaDraft.filter(d=>{
+    const r=nota.find(n=>n.id===d.notaId);
+    if(!r)return false;
+    if(r.lunas||r.sisa<=0)return false;
+    // Update sisa terbaru kalau sudah berubah (misalnya dibayar parsial dari Bayar Cepat)
+    if(d.sisa!==r.sisa){
+      d.sisa=r.sisa;
+      if(d.akanBayar>r.sisa)d.akanBayar=r.sisa;
+    }
+    return true;
+  });
+  if(rencanaDraft.length===0){
+    if(tb)tb.innerHTML='';
+    if(wrap)wrap.style.display='none';
+    if(stats)stats.style.display='none';
+    if(empty)empty.style.display='';
+    if(finalizeBtn)finalizeBtn.disabled=true;
+    updateFilterBanner('rencana',null);
+    updateRencanaBadge();
+    return;
+  }
+  if(empty)empty.style.display='none';
+  if(wrap)wrap.style.display='';
+  if(stats)stats.style.display='grid';
+  if(finalizeBtn)finalizeBtn.disabled=false;
+  // Apply search filter
+  const q=(document.getElementById('q-rencana')?.value||'').toLowerCase().trim();
+  const filtered=q
+    ? rencanaDraft.filter(d=>d.nama.toLowerCase().includes(q))
+    : rencanaDraft;
+  // Sort: tempo terdekat dulu
+  const sorted=[...filtered].sort((a,b)=>{
+    if(a.tgl_tempo&&b.tgl_tempo)return a.tgl_tempo.localeCompare(b.tgl_tempo);
+    if(a.tgl_tempo)return -1;
+    if(b.tgl_tempo)return 1;
+    return 0;
+  });
+  // Kalau search aktif tapi hasil kosong, tampilkan info ringan
+  if(q&&sorted.length===0){
+    tb.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text2)">
+      🔍 Tidak ada supplier "${esc(q)}" di draft ini
+    </td></tr>`;
+    rencanaUpdateStats();
+    updateRencanaBadge();
+    return;
+  }
+  tb.innerHTML=sorted.map(d=>{
+    const od=isOverdue(d.tgl_tempo);
+    const adjusted=d.akanBayar!==d.sisa;
+    const adjClass=adjusted?'adjusted':'';
+    const statusBadge=d.akanBayar===0?'<span class="badge badge-gray">Skip</span>'
+      :d.akanBayar===d.sisa?'<span class="badge badge-green">Lunas</span>'
+      :'<span class="badge badge-amber">Cicil</span>';
+    const areaBadge=`<span class="badge ${d.area==='SALES'?'badge-blue':'badge-purple'}">${d.area}</span>`;
+    const safeId=esc(d.notaId);
+    return`<tr data-row-id="${safeId}">
+      <td class="row-supplier"><strong>${esc(d.nama)}</strong></td>
+      <td class="row-meta hide-m" data-l="Tempo">${areaBadge} ${d.tgl_tempo?fmtDate(d.tgl_tempo):'-'}${od?' ⚠️':''} <span class="row-status">${statusBadge}</span></td>
+      <td class="row-amount" data-l="Sisa Hutang"><div class="lbl">Sisa</div><div class="val amount-red">${fmtRp(d.sisa)}</div></td>
+      <td data-l="Akan Bayar">
+        <input type="number" class="rencana-amount-input ${adjClass}" value="${d.akanBayar}" min="0" max="${d.sisa}" 
+          oninput="rencanaSetAmount('${safeId}',this.value,this)" 
+          inputmode="numeric" data-input-id="${safeId}">
+        <div style="display:flex;gap:3px;margin-top:4px;flex-wrap:wrap">
+          <button class="rencana-quick lunas" onclick="rencanaQuickSet('${safeId}','lunas')" title="Lunas">Lunas</button>
+          <button class="rencana-quick" onclick="rencanaQuickSet('${safeId}','half')" title="Setengah">½</button>
+          <button class="rencana-quick" onclick="rencanaQuickSet('${safeId}','zero')" title="Skip / nol">0</button>
+        </div>
+      </td>
+      <td class="row-rek hide-m" data-l="Bank">${d.bank?`<span class="badge badge-gray">${d.bank}</span> ${d.no_rek||''}`:'—'}</td>
+      <td class="rencana-row-aksi">
+        <button class="btn btn-ghost btn-sm" onclick="rencanaRemove('${safeId}')" title="Hapus dari draft" aria-label="Hapus">✕</button>
+      </td>
+    </tr>`;
+  }).join('');
+  rencanaUpdateStats();
+  updateRencanaBadge();
+}
+
+function rencanaFinalize(){
+  if(rencanaDraft.length===0)return;
+  const eligible=rencanaDraft.filter(d=>d.akanBayar>0);
+  if(eligible.length===0){
+    toast('Tidak ada nota dengan jumlah > 0','error');
+    return;
+  }
+  const total=eligible.reduce((a,d)=>a+d.akanBayar,0);
+  const tgl=getRencanaTgl();
+  const week=autoWeekLabel(tgl);
+  if(!confirm(`Catat ${eligible.length} transfer tanggal ${fmtDate(tgl)} ke periode "${week}"?\n\nTotal: ${fmtRp(total)}\n\nIni akan:\n- Catat ke Transfer Mingguan\n- Kurangi sisa hutang setiap nota\n- Tandai lunas otomatis jika sisa = 0`))return;
+  // Catat satu per satu
+  eligible.forEach(d=>{
+    const r=nota.find(n=>n.id===d.notaId);
+    if(!r)return;
+    paid.unshift({id:uid(),week,tgl_nota:tgl,nama:r.nama.toUpperCase(),nominal:d.akanBayar,no_rek:d.no_rek||'',nama_rek:d.nama_rek||''});
+    r.sisa=Math.max(0,(r.sisa||0)-d.akanBayar);
+    if(r.sisa===0)r.lunas=true;
+  });
+  rencanaDraft=[];
+  rencanaIsAutoSynced=true; // reset ke auto-sync mode
+  renderRencana();
+  updateRencanaBadge();
+  initWeekFilter();
+  renderStatsBelum();renderBelum();
+  renderStatsBayar();renderBayar();
+  renderStatsSemua();renderSemua();
+  saveData();
+  toast(`✅ ${eligible.length} transfer (${fmtRp(total)}) dicatat tanggal ${fmtDate(tgl)}`,'success');
+  setTimeout(()=>{
+    const bayarTab=document.querySelectorAll('.nav-tab')[2];
+    if(bayarTab)bayarTab.click();
+  },800);
+}
+
+// ===== LAPORAN SETORAN =====
+function rencanaShowReport(){
+  const eligible=rencanaDraft.filter(d=>d.akanBayar>0);
+  if(eligible.length===0){
+    toast('Tidak ada nota dengan jumlah > 0 di draft','info');
+    return;
+  }
+  const tgl=getRencanaTgl();
+  const week=autoWeekLabel(tgl);
+  const total=eligible.reduce((a,d)=>a+d.akanBayar,0);
+  const totalSisa=eligible.reduce((a,d)=>a+d.sisa,0);
+  // Kelompokkan per bank
+  const groups={BCA:[],BRI:[],BNI:[],Lainnya:[]};
+  eligible.forEach(d=>{
+    const bank=(d.bank||'').toUpperCase().trim();
+    if(bank==='BCA')groups.BCA.push(d);
+    else if(bank==='BRI')groups.BRI.push(d);
+    else if(bank==='BNI')groups.BNI.push(d);
+    else groups.Lainnya.push(d);
+  });
+  // Sort tiap grup berdasarkan tempo
+  Object.keys(groups).forEach(k=>{
+    groups[k].sort((a,b)=>{
+      if(a.tgl_tempo&&b.tgl_tempo)return a.tgl_tempo.localeCompare(b.tgl_tempo);
+      if(a.tgl_tempo)return -1;
+      if(b.tgl_tempo)return 1;
+      return 0;
+    });
+  });
+  // Hitung breakdown per bank
+  const bankTotals={BCA:0,BRI:0,BNI:0,Lainnya:0};
+  Object.keys(groups).forEach(k=>{bankTotals[k]=groups[k].reduce((a,d)=>a+d.akanBayar,0)});
+
+  const now=new Date();
+  const waktuCetak=now.toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  // Build tabel per bank
+  const bankSection=(name,cls,items,emoji)=>{
+    if(items.length===0)return '';
+    const rows=items.map((d,i)=>{
+      const status=d.akanBayar===d.sisa?'<strong style="color:#0a6e3f">LUNAS</strong>':'<strong style="color:#b87a00">CICIL</strong>';
+      const tempoTxt=d.tgl_tempo?fmtDate(d.tgl_tempo):'-';
+      return `<tr>
+        <td class="center">${i+1}</td>
+        <td><strong>${esc(d.nama)}</strong></td>
+        <td>${esc(d.area||'-')}</td>
+        <td class="center">${tempoTxt}</td>
+        <td class="right">${fmtRp(d.sisa)}</td>
+        <td class="right" style="font-weight:700">${fmtRp(d.akanBayar)}</td>
+        <td class="center">${status}</td>
+        <td><span style="font-family:var(--mono);font-size:11px">${esc(d.no_rek||'-')}</span></td>
+        <td>${esc(d.nama_rek||'-')}</td>
+      </tr>`;
+    }).join('');
+    return `<div class="laporan-bank-section">
+      <div class="laporan-bank-header ${cls}">
+        <span class="laporan-bank-name">${emoji} ${name} <span style="font-weight:400;font-size:11px;color:#5b6478">— ${items.length} supplier</span></span>
+        <span class="laporan-bank-tot">${fmtRp(bankTotals[name])}</span>
+      </div>
+      <table class="laporan-tbl">
+        <thead><tr>
+          <th class="center" style="width:30px">No</th>
+          <th>Supplier</th>
+          <th style="width:60px">Area</th>
+          <th class="center" style="width:75px">Tempo</th>
+          <th class="right" style="width:110px">Sisa</th>
+          <th class="right" style="width:110px">Akan Bayar</th>
+          <th class="center" style="width:60px">Status</th>
+          <th style="width:115px">No. Rek</th>
+          <th>Nama Pemilik</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+  };
+
+  const html=`<div class="laporan-doc">
+    <h1>📄 Laporan Rencana Setoran ke Bank</h1>
+    <div class="laporan-meta">
+      <div class="laporan-meta-item"><div class="lbl">Tanggal Setor</div><div class="val">${fmtDate(tgl)}</div></div>
+      <div class="laporan-meta-item"><div class="lbl">Periode Minggu</div><div class="val">${esc(week)}</div></div>
+      <div class="laporan-meta-item"><div class="lbl">Jumlah Nota</div><div class="val">${eligible.length} nota</div></div>
+      <div class="laporan-meta-item"><div class="lbl">Dicetak</div><div class="val">${esc(waktuCetak)}</div></div>
+    </div>
+
+    <h2>Ringkasan Per Bank</h2>
+    <div class="laporan-summary">
+      <div class="laporan-sum-card"><div class="lbl">🟦 BCA</div><div class="val">${fmtRp(bankTotals.BCA)}</div></div>
+      <div class="laporan-sum-card"><div class="lbl">🟦 BRI</div><div class="val">${fmtRp(bankTotals.BRI)}</div></div>
+      <div class="laporan-sum-card"><div class="lbl">🟧 BNI</div><div class="val">${fmtRp(bankTotals.BNI)}</div></div>
+      <div class="laporan-sum-card"><div class="lbl">🏦 Lainnya</div><div class="val">${fmtRp(bankTotals.Lainnya)}</div></div>
+    </div>
+
+    <h2>Rincian Per Bank</h2>
+    ${bankSection('BCA','bca',groups.BCA,'🟦')}
+    ${bankSection('BRI','bri',groups.BRI,'🟦')}
+    ${bankSection('BNI','bni',groups.BNI,'🟧')}
+    ${bankSection('Lainnya','lain',groups.Lainnya,'🏦')}
+
+    <div class="laporan-grand-total">
+      <span>TOTAL SETORAN ${fmtDate(tgl)}</span>
+      <span class="val">${fmtRp(total)}</span>
+    </div>
+
+    <div class="laporan-sig">
+      <div class="laporan-sig-block"><div class="laporan-sig-line">Disiapkan oleh</div></div>
+      <div class="laporan-sig-block"><div class="laporan-sig-line">Disetujui oleh</div></div>
+    </div>
+
+    <div class="laporan-footer">
+      Total sisa hutang seluruh nota di laporan: ${fmtRp(totalSisa)} · Akan dibayar: ${fmtRp(total)} · Sisa setelah pembayaran: ${fmtRp(totalSisa-total)}<br>
+      Dicetak dari aplikasi Nota Supplier · ${esc(waktuCetak)}
+    </div>
+  </div>`;
+  document.getElementById('laporan-body').innerHTML=html;
+  openModal('modal-laporan');
+}
+
+function laporanPrint(){
+  document.body.classList.add('printing-laporan');
+  setTimeout(()=>{
+    window.print();
+    setTimeout(()=>document.body.classList.remove('printing-laporan'),500);
+  },100);
 }
 
 // ===== REK CARD HTML =====
@@ -1280,6 +2009,8 @@ function renderBelum(){
     updateFilterBanner('belum',{icon:'📊',activeFilters:activeF,stats,bankBreakdown});
   } else updateFilterBanner('belum',null);
   pages.belum=0;renderBelumPage();
+  // Auto-sync ke tab Rencana Transfer (hanya kalau draft kosong / belum ada adjust manual)
+  rencanaAutoSync();
 }
 function renderBelumPage(){
   const s=pages.belum*PAGE,sl=_fb.slice(s,s+PAGE);
@@ -1491,17 +2222,23 @@ function renderRekLookup(){
 function autoFillRek(nameId,bankId,norekId,namarekId){
   const nama=document.getElementById(nameId).value;
   const rek=getRek(nama);
+  const previewId=nameId==='n-nama'?'n-rek-preview':'b-rek-preview';
+  const prev=document.getElementById(previewId);
+  const bankEl=document.getElementById(bankId);
+  const norekEl=document.getElementById(norekId);
+  const namarekEl=document.getElementById(namarekId);
   if(rek){
-    if(rek.bank)document.getElementById(bankId).value=rek.bank;
-    if(rek.no_rek)document.getElementById(norekId).value=rek.no_rek;
-    if(rek.nama_rek)document.getElementById(namarekId).value=rek.nama_rek;
-    // Show preview card
-    const previewId=nameId==='n-nama'?'n-rek-preview':'b-rek-preview';
-    const prev=document.getElementById(previewId);
+    if(bankEl)bankEl.value=rek.bank||'';
+    if(norekEl)norekEl.value=rek.no_rek||'';
+    if(namarekEl)namarekEl.value=rek.nama_rek||'';
+    // Tandai field sebagai auto-filled
+    [bankEl,norekEl,namarekEl].forEach(el=>{if(el)el.dataset.autoFilled='1'});
     if(prev){prev.style.display='';prev.innerHTML=rekCardHtml(rek,nama)}
   } else {
-    const previewId=nameId==='n-nama'?'n-rek-preview':'b-rek-preview';
-    const prev=document.getElementById(previewId);
+    // Supplier baru / tidak ada di rekMap: clear field hanya kalau sebelumnya auto-filled
+    [bankEl,norekEl,namarekEl].forEach(el=>{
+      if(el&&el.dataset.autoFilled==='1'){el.value='';el.dataset.autoFilled=''}
+    });
     if(prev)prev.style.display='none';
   }
 }
@@ -1564,15 +2301,16 @@ function nUpdateSisa(){
   const paid=parseFloat(document.getElementById('n-paid').value)||0;
   const info=document.getElementById('n-sisa-info');
   let sisa=0;
-  if(nStatus==='lunas')sisa=0;
-  else if(nStatus==='belum')sisa=nominal;
+  if(nStatus==='lunas'){sisa=0;if(info)info.innerHTML=''}
+  else if(nStatus==='belum'){sisa=nominal;if(info)info.innerHTML=''}
   else { // cicil
     sisa=Math.max(0,nominal-paid);
-    if(nominal>0&&info){
-      if(paid<=0)info.innerHTML='<span style="color:var(--text2)">Masukkan jumlah yang sudah dibayar</span>';
+    if(info){
+      if(nominal<=0)info.innerHTML='<span style="color:var(--text2)">Masukkan nominal total dulu</span>';
+      else if(paid<=0)info.innerHTML='<span style="color:var(--text2)">Masukkan jumlah yang sudah dibayar</span>';
       else if(paid>=nominal)info.innerHTML=`<span style="color:var(--green)">✓ Akan dianggap LUNAS (Rp 0 sisa)</span>`;
       else info.innerHTML=`💡 Sisa hutang: <strong style="color:var(--red)">${fmtRp(sisa)}</strong>`;
-    } else if(info)info.innerHTML='';
+    }
   }
   document.getElementById('n-sisa').value=sisa;
 }
@@ -1582,16 +2320,20 @@ function submitNota(){
   const nominal=parseFloat(document.getElementById('n-nominal').value)||0;
   if(!nama){toast('Nama supplier wajib diisi','error');return}
   if(!nominal){toast('Nominal total wajib diisi','error');return}
-  // Tentukan sisa berdasarkan status
-  let sisa=nominal;
+  // Tentukan sisa berdasarkan status — dengan safety guard
+  let sisa=nominal; // default: sisa = nominal penuh (belum bayar)
   let paidAmount=0;
-  if(nStatus==='lunas'){sisa=0;paidAmount=nominal}
+  let isLunas=false;
+  if(nStatus==='lunas'){sisa=0;paidAmount=nominal;isLunas=true}
   else if(nStatus==='cicil'){
     paidAmount=parseFloat(document.getElementById('n-paid').value)||0;
     if(paidAmount<=0){toast('Masukkan jumlah yang sudah dibayar','error');return}
     if(paidAmount>nominal){toast('Pembayaran tidak boleh lebih dari nominal','error');return}
     sisa=nominal-paidAmount;
+    isLunas=(sisa===0);
   }
+  // Status belum: pastikan sisa = nominal (anti-bug)
+  else { sisa=nominal; isLunas=false; }
   const bank=document.getElementById('n-bank').value;
   const norek=document.getElementById('n-norek').value;
   const namarek=document.getElementById('n-namarek').value;
@@ -1599,7 +2341,7 @@ function submitNota(){
   const rec={id:uid(),area:document.getElementById('n-area').value,nama,
     tgl_nota:document.getElementById('n-tgl-nota').value||today(),
     tgl_tempo:document.getElementById('n-tgl-tempo').value||null,
-    nominal,sisa,bank,no_rek:norek,nama_rek:namarek,lunas:sisa===0};
+    nominal,sisa,bank,no_rek:norek,nama_rek:namarek,lunas:isLunas};
   nota.unshift(rec);
   // Kalau ada pembayaran (cicil/lunas), catat juga ke paid history
   if(paidAmount>0){
@@ -1610,13 +2352,14 @@ function submitNota(){
   document.getElementById('n-bank').value='';
   document.getElementById('n-rek-preview').style.display='none';
   document.getElementById('n-sisa-info').innerHTML='';
+  const finalStat=nStatus;
   nSetStatus('belum'); // reset ke default
   closeModal('modal-nota');
   updateDataLists();renderStatsBelum();renderBelum();
   if(paidAmount>0){initWeekFilter();renderStatsBayar();renderBayar()}
   renderStatsSemua();renderSemua();
   saveData();
-  if(nStatus==='lunas')toast(`✓ Nota ${nama} (lunas) berhasil disimpan`,'success');
+  if(finalStat==='lunas')toast(`✓ Nota ${nama} (lunas) berhasil disimpan`,'success');
   else if(paidAmount>0)toast(`✓ Nota ${nama} disimpan — sisa ${fmtRp(sisa)}`,'success');
   else toast('Nota baru berhasil disimpan ✓','success');
 }
@@ -1647,6 +2390,7 @@ function submitBayar(){
   document.getElementById('b-sisa-info').style.display='none';
   closeModal('modal-bayar');
   initWeekFilter();renderStatsBelum();renderBelum();renderStatsBayar();renderBayar();
+  cleanupRencanaDraft();
   saveData();
   toast('Transfer berhasil dicatat ✓','success');
 }
@@ -1843,6 +2587,7 @@ function bcSubmit(){
   }
   closeModal('modal-bayar-cepat');
   initWeekFilter();renderStatsBelum();renderBelum();renderStatsBayar();renderBayar();renderStatsSemua();renderSemua();
+  cleanupRencanaDraft();
   saveData();
   if(bcMode==='lunas')toast(`✅ ${r.nama} sudah LUNAS — ${fmtRp(nominal)}`,'success');
   else toast(`💰 Cicilan ${fmtRp(nominal)} dicatat. Sisa: ${fmtRp(r._totalSisa-nominal)}`,'success');
@@ -1895,6 +2640,7 @@ function saveEdit(){
   if(r.no_rek)rekMap[r.nama.toUpperCase()]={bank:r.bank,no_rek:r.no_rek,nama_rek:r.nama_rek};
   closeModal('modal-edit');
   renderStatsBelum();renderBelum();renderSemua();
+  cleanupRencanaDraft();
   saveData();
   toast('Data berhasil diperbarui ✓','success');
 }
@@ -1906,6 +2652,7 @@ function deleteNota(){
   nota=nota.filter(n=>n.id!==id);
   closeModal('modal-edit');
   renderStatsBelum();renderBelum();renderStatsSemua();renderSemua();
+  cleanupRencanaDraft();
   saveData();
   toast('Nota berhasil dihapus','success');
 }
@@ -2093,6 +2840,8 @@ function applyTheme(theme){
     document.body.classList.add('theme-light');
     const btn=document.getElementById('theme-toggle');
     if(btn){btn.textContent='☀️';btn.title='Ganti ke tema gelap'}
+    const btnMenu=document.getElementById('theme-toggle-menu');
+    if(btnMenu)btnMenu.textContent='☀️ Ganti ke Tema Gelap';
     // Update meta theme-color
     const meta=document.querySelector('meta[name="theme-color"]');
     if(meta)meta.setAttribute('content','#ffffff');
@@ -2100,6 +2849,8 @@ function applyTheme(theme){
     document.body.classList.remove('theme-light');
     const btn=document.getElementById('theme-toggle');
     if(btn){btn.textContent='🌙';btn.title='Ganti ke tema terang'}
+    const btnMenu=document.getElementById('theme-toggle-menu');
+    if(btnMenu)btnMenu.textContent='🌙 Ganti ke Tema Terang';
     const meta=document.querySelector('meta[name="theme-color"]');
     if(meta)meta.setAttribute('content','#0f1117');
   }
@@ -2190,6 +2941,21 @@ function printPanel(){
   document.getElementById('ph-bayar-sub').textContent=`Dicetak: ${now} | Periode: ${weekVal} | Total: ${_fba.length} transaksi`;
   document.getElementById('ph-semua-sub').textContent=`Dicetak: ${now} | Total: ${_fs.length} nota`;
 
+  window.print();
+}
+
+function rencanaPrint(){
+  if(rencanaDraft.length===0){
+    toast('Draft kosong, tidak ada yang bisa diprint','info');
+    return;
+  }
+  const now=new Date().toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const tgl=getRencanaTgl();
+  const week=autoWeekLabel(tgl);
+  const total=rencanaDraft.reduce((a,d)=>a+(d.akanBayar||0),0);
+  const sub=`Dicetak: ${now} | Tgl Setor: ${fmtDate(tgl)} | Periode: ${week} | Total: ${rencanaDraft.length} nota | Akan ditransfer: ${fmtRp(total)}`;
+  const ph=document.getElementById('ph-rencana-sub');
+  if(ph)ph.textContent=sub;
   window.print();
 }
 
