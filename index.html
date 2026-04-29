@@ -31,6 +31,75 @@
   --shadow:0 2px 12px rgba(0,0,0,.4);
   --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
 }
+
+/* LIGHT THEME — terang, untuk print & kebutuhan visibility */
+body.theme-light{
+  --bg:#f4f6fb;--bg2:#ffffff;--bg3:#f8fafc;--bg4:#eef2f7;
+  --border:#d8dee8;--border2:#c4ccd9;
+  --text:#1a2332;--text2:#5b6478;--text3:#8b96b0;
+  --blue:#1d6ddc;--blue2:#1454ad;--blue-bg:rgba(29,109,220,.10);
+  --green:#0c8a4f;--green-bg:rgba(12,138,79,.10);
+  --red:#d23434;--red-bg:rgba(210,52,52,.10);
+  --amber:#b87a00;--amber-bg:rgba(184,122,0,.10);
+  --purple:#6c47cc;--purple-bg:rgba(108,71,204,.10);
+  --teal:#117c8d;--teal-bg:rgba(17,124,141,.10);
+  --shadow:0 2px 10px rgba(20,30,50,.08);
+}
+
+/* PRINT MODE — selalu light, sembunyikan UI non-essential */
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+  body{
+    --bg:#fff!important;--bg2:#fff!important;--bg3:#f5f7fb!important;--bg4:#eef2f7!important;
+    --border:#bbc4d2!important;--border2:#9ba8bd!important;
+    --text:#000!important;--text2:#333!important;--text3:#555!important;
+    --blue:#0048a8!important;--blue2:#003580!important;--blue-bg:#e6efff!important;
+    --green:#0a6e3f!important;--green-bg:#e1f3eb!important;
+    --red:#a82020!important;--red-bg:#fde6e6!important;
+    --amber:#8a5a00!important;--amber-bg:#fdf4dd!important;
+    --purple:#5234a8!important;--purple-bg:#ece5fa!important;
+    --teal:#0c5e6b!important;--teal-bg:#dff4f7!important;
+    background:#fff!important;color:#000!important;
+  }
+  .header,.nav,.fab-top,.no-print,.controls,.btn,.toast-container,#fab-top,.copy-btn,.pagination{display:none!important}
+  .panel{padding:0!important}
+  .panel:not(.active){display:none!important}
+  .table-wrap{border:1px solid #bbc4d2!important;box-shadow:none!important;page-break-inside:auto}
+  .tbl{font-size:11px!important}
+  .tbl tr{page-break-inside:avoid;page-break-after:auto}
+  .tbl th{background:#eef2f7!important;color:#000!important;border-bottom:1px solid #999!important}
+  .tbl td{color:#000!important;border-bottom:1px solid #ddd!important}
+  .stat{border:1px solid #bbc4d2!important;background:#fff!important}
+  .filter-banner{border:1px solid #1d6ddc!important;background:#e6efff!important;page-break-inside:avoid}
+  .filter-banner-title,.filter-banner-lbl,.filter-banner-num{color:#000!important}
+  .filter-banner-num.amber{color:#8a5a00!important}
+  .filter-banner-num.red{color:#a82020!important}
+  .filter-banner-num.green{color:#0a6e3f!important}
+  .fb-bank-card{background:#fff!important;border:1px solid #999!important}
+  .fb-bca .fb-bank-name{color:#0048a8!important}
+  .fb-bri .fb-bank-name{color:#005099!important}
+  .fb-bni .fb-bank-name{color:#a85e00!important}
+  .badge{border:1px solid currentColor!important;font-weight:600!important}
+  .badge-blue,.badge-purple,.badge-green,.badge-red,.badge-amber,.badge-teal,.badge-gray{background:#fff!important}
+  .amount-red{color:#a82020!important;font-weight:700!important}
+  .amount-green{color:#0a6e3f!important;font-weight:700!important}
+  .overdue{color:#a82020!important;font-weight:700!important}
+  /* Card mobile view: kembalikan ke tabel saat print */
+  .tbl-mobile-cards thead{display:table-header-group!important}
+  .tbl-mobile-cards,.tbl-mobile-cards tbody{display:table!important;width:100%!important}
+  .tbl-mobile-cards tr{display:table-row!important;border:none!important;padding:0!important}
+  .tbl-mobile-cards td{display:table-cell!important;padding:6px 8px!important;border-bottom:1px solid #ddd!important}
+  .tbl-mobile-cards td[data-l]:before,.tbl-mobile-cards td.row-amount:before,.tbl-mobile-cards td.row-rek:before{display:none!important}
+  .tbl-mobile-cards .row-amount{display:table-cell!important}
+  .tbl-mobile-cards .row-amount > div{display:inline-block!important;margin-right:8px}
+  .tbl-mobile-cards .row-amount .lbl{display:none!important}
+  .tbl-mobile-cards .row-aksi{display:none!important}
+  /* Modal jangan keprint */
+  .modal-backdrop{display:none!important}
+  /* Header print */
+  @page{margin:1.5cm 1cm}
+}
+
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);overscroll-behavior-y:contain}
@@ -380,6 +449,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 <div class="header">
   <div class="logo"><span class="logo-dot" id="sync-dot"></span><span id="sync-label">Nota Supplier</span></div>
   <div class="header-right">
+    <button class="btn btn-ghost btn-sm" onclick="toggleTheme()" title="Ganti tema terang/gelap" id="theme-toggle">🌙</button>
     <button class="btn btn-ghost btn-sm" onclick="openModal('modal-rek')" title="Cari rekening">🏦 <span class="hide-m">Rekening</span></button>
     <button class="btn btn-ghost btn-sm" onclick="openModal('modal-menu')" title="Menu">⚙️</button>
     <button class="btn btn-primary btn-sm" onclick="openNotaBaru()">+ <span class="hide-m">Nota</span></button>
@@ -408,14 +478,20 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <select class="inp inp-sel form-select" id="f-status" onchange="renderBelum()" style="width:140px">
       <option value="belum">Belum Lunas</option><option value="sisa">Ada Sisa</option><option value="semua">Semua</option>
     </select>
-    <select class="inp inp-sel form-select" id="f-tempo" onchange="renderBelum()" style="width:170px">
+    <select class="inp inp-sel form-select" id="f-tempo" onchange="onTempoChange()" style="width:170px">
       <option value="">Semua Jatuh Tempo</option>
       <option value="overdue">⚠️ Sudah Lewat</option>
       <option value="today">📅 Hari Ini</option>
       <option value="7">🔔 7 Hari ke Depan</option>
       <option value="30">📆 30 Hari ke Depan</option>
+      <option value="custom">📅 Pilih Tanggal...</option>
       <option value="notset">— Belum Diatur</option>
     </select>
+    <div id="f-tempo-range" style="display:none;align-items:center;gap:6px;flex-wrap:wrap">
+      <input type="date" class="inp" id="f-tempo-from" onchange="renderBelum()" style="width:140px" title="Dari tanggal">
+      <span style="color:var(--text2);font-size:12px">s/d</span>
+      <input type="date" class="inp" id="f-tempo-to" onchange="renderBelum()" style="width:140px" title="Sampai tanggal">
+    </div>
     <button class="btn btn-success" onclick="openBayarCepat()">⚡ Bayar Cepat</button>
     <button class="btn btn-ghost btn-sm hide-m" onclick="openModal('modal-bayar')">💳 Bayar Lengkap</button>
     <button class="btn btn-ghost btn-sm no-print hide-m" onclick="printPanel()" title="Cetak">🖨️ Print</button>
@@ -800,6 +876,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     </div>
     <div class="modal-body">
       <div class="info-box">☁️ Data Anda otomatis tersinkron via cloud (Supabase). Semua admin di komputer/HP melihat data yang sama secara real-time.</div>
+      <div class="section-label">Tampilan</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
+        <button class="btn btn-ghost" onclick="toggleTheme()" style="justify-content:center" id="theme-toggle-menu">🌙 Ganti Tema Terang / Gelap</button>
+      </div>
+      <div class="divider"></div>
       <div class="section-label">Sinkronisasi Cloud</div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
         <button class="btn btn-primary" onclick="manualSync();closeModal('modal-menu')" style="justify-content:center">🔄 Sinkronkan Sekarang</button>
@@ -1100,6 +1181,9 @@ function clearFilters(panelId){
     document.getElementById('f-area').value='';
     document.getElementById('f-status').value='belum';
     document.getElementById('f-tempo').value='';
+    const fr=document.getElementById('f-tempo-from');if(fr)fr.value='';
+    const to=document.getElementById('f-tempo-to');if(to)to.value='';
+    const wrap=document.getElementById('f-tempo-range');if(wrap)wrap.style.display='none';
     renderBelum();
   } else if(panelId==='bayar'){
     document.getElementById('q-bayar').value='';
@@ -1113,12 +1197,34 @@ function clearFilters(panelId){
   }
 }
 
+// Toggle range input saat user pilih custom
+function onTempoChange(){
+  const v=document.getElementById('f-tempo').value;
+  const wrap=document.getElementById('f-tempo-range');
+  if(v==='custom'){
+    wrap.style.display='inline-flex';
+    // Auto-set default: dari hari ini sampai 7 hari ke depan
+    const fromEl=document.getElementById('f-tempo-from');
+    const toEl=document.getElementById('f-tempo-to');
+    if(!fromEl.value)fromEl.value=today();
+    if(!toEl.value){
+      const t=new Date();t.setDate(t.getDate()+7);
+      toEl.value=t.toISOString().slice(0,10);
+    }
+  } else {
+    wrap.style.display='none';
+  }
+  renderBelum();
+}
+
 // ===== RENDER BELUM =====
 function renderBelum(){
   const q=document.getElementById('q-belum').value.toLowerCase();
   const area=document.getElementById('f-area').value;
   const status=document.getElementById('f-status').value;
   const tempo=document.getElementById('f-tempo').value;
+  const tFrom=document.getElementById('f-tempo-from')?.value||'';
+  const tTo=document.getElementById('f-tempo-to')?.value||'';
   const now=new Date();now.setHours(0,0,0,0);
   _fb=nota.filter(r=>{
     if(area&&r.area!==area)return false;
@@ -1133,6 +1239,11 @@ function renderBelum(){
       else if(tempo==='7'){if(!d||d<now)return false;const lim=new Date(now);lim.setDate(lim.getDate()+7);if(d>lim)return false}
       else if(tempo==='30'){if(!d||d<now)return false;const lim=new Date(now);lim.setDate(lim.getDate()+30);if(d>lim)return false}
       else if(tempo==='notset'){if(r.tgl_tempo&&/^\d{4}-\d{2}-\d{2}$/.test(r.tgl_tempo))return false}
+      else if(tempo==='custom'){
+        if(!d)return false;
+        if(tFrom&&r.tgl_tempo<tFrom)return false;
+        if(tTo&&r.tgl_tempo>tTo)return false;
+      }
     }
     return true;
   });
@@ -1144,7 +1255,16 @@ function renderBelum(){
   else if(status==='semua')activeF.push('Status: Semua');
   if(tempo){
     const lblMap={'overdue':'⚠️ Sudah Lewat','today':'📅 Hari Ini','7':'🔔 7 Hari ke Depan','30':'📆 30 Hari ke Depan','notset':'Belum Diatur'};
-    activeF.push('Tempo: '+(lblMap[tempo]||tempo));
+    if(tempo==='custom'){
+      let lbl='Tempo: ';
+      if(tFrom&&tTo)lbl+=`${fmtDate(tFrom)} s/d ${fmtDate(tTo)}`;
+      else if(tFrom)lbl+=`Dari ${fmtDate(tFrom)}`;
+      else if(tTo)lbl+=`Sampai ${fmtDate(tTo)}`;
+      else lbl+='Pilih tanggal...';
+      activeF.push(lbl);
+    } else {
+      activeF.push('Tempo: '+(lblMap[tempo]||tempo));
+    }
   }
   if(activeF.length){
     const totNominal=_fb.reduce((a,r)=>a+r.nominal,0);
@@ -1966,6 +2086,38 @@ async function manualSync(){
   updateDataLists();
   toast('Sinkronisasi selesai ✓','success');
 }
+
+// ===== THEME TOGGLE =====
+function applyTheme(theme){
+  if(theme==='light'){
+    document.body.classList.add('theme-light');
+    const btn=document.getElementById('theme-toggle');
+    if(btn){btn.textContent='☀️';btn.title='Ganti ke tema gelap'}
+    // Update meta theme-color
+    const meta=document.querySelector('meta[name="theme-color"]');
+    if(meta)meta.setAttribute('content','#ffffff');
+  } else {
+    document.body.classList.remove('theme-light');
+    const btn=document.getElementById('theme-toggle');
+    if(btn){btn.textContent='🌙';btn.title='Ganti ke tema terang'}
+    const meta=document.querySelector('meta[name="theme-color"]');
+    if(meta)meta.setAttribute('content','#0f1117');
+  }
+}
+function toggleTheme(){
+  const isLight=document.body.classList.contains('theme-light');
+  const newTheme=isLight?'dark':'light';
+  applyTheme(newTheme);
+  try{localStorage.setItem('ns-theme',newTheme)}catch(e){}
+  toast(newTheme==='light'?'☀️ Tema terang aktif':'🌙 Tema gelap aktif','info');
+}
+// Apply saved theme on load
+(function(){
+  try{
+    const saved=localStorage.getItem('ns-theme');
+    if(saved==='light')applyTheme('light');
+  }catch(e){}
+})();
 
 function showInstallGuide(){
   const ua=navigator.userAgent||'';
