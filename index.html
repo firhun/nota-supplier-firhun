@@ -312,17 +312,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 #modal-laporan .modal-body{padding:0!important;background:#fff}
 #modal-laporan .modal{background:var(--bg2)}
 
-/* PRINT MODE khusus laporan: hanya laporan yang keprint */
-@media print{
-  body.printing-laporan > *:not(.modal-backdrop){display:none!important}
-  body.printing-laporan .modal-backdrop:not(#modal-laporan){display:none!important}
-  body.printing-laporan #modal-laporan{position:static!important;background:#fff!important;display:block!important}
-  body.printing-laporan #modal-laporan .modal{max-width:100%!important;border-radius:0!important;box-shadow:none!important;background:#fff!important;border:none!important}
-  body.printing-laporan #modal-laporan .modal-header,body.printing-laporan #modal-laporan .modal-footer{display:none!important}
-  body.printing-laporan .laporan-doc{padding:8px 0!important}
-  body.printing-laporan .laporan-bank-section{page-break-inside:avoid}
-  body.printing-laporan .laporan-tbl tr{page-break-inside:avoid}
-}
+/* PRINT MODE khusus laporan - tidak dipakai lagi (laporan sekarang buka window baru) */
 @media(max-width:640px){
   .laporan-doc{padding:16px 14px;font-size:12px}
   .laporan-doc h1{font-size:17px}
@@ -553,7 +543,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <div class="controls">
     <input class="inp inp-search" type="text" placeholder="🔍  Cari nama supplier..." id="q-belum" oninput="renderBelum()">
     <select class="inp inp-sel form-select" id="f-area" onchange="renderBelum()" style="width:120px">
-      <option value="">Semua Area</option><option value="SALES">SALES</option><option value="SOLO/SBY">SOLO/SBY</option>
+      <option value="">Semua Area</option>
+      <option value="SALES">SALES</option>
+      <option value="SOLO/SBY">SOLO/SBY</option>
+      <option value="BOGOR">BOGOR</option>
+      <option value="JAKARTA">JAKARTA</option>
     </select>
     <select class="inp inp-sel form-select" id="f-status" onchange="renderBelum()" style="width:140px">
       <option value="belum">Belum Lunas</option><option value="sisa">Ada Sisa</option><option value="semua">Semua</option>
@@ -686,7 +680,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <div class="controls">
     <input class="inp inp-search" type="text" placeholder="🔍  Cari nama supplier..." id="q-semua" oninput="renderSemua()">
     <select class="inp inp-sel form-select" id="f-area2" onchange="renderSemua()" style="width:130px">
-      <option value="">Semua Area</option><option value="SALES">SALES</option><option value="SOLO/SBY">SOLO/SBY</option>
+      <option value="">Semua Area</option>
+      <option value="SALES">SALES</option>
+      <option value="SOLO/SBY">SOLO/SBY</option>
+      <option value="BOGOR">BOGOR</option>
+      <option value="JAKARTA">JAKARTA</option>
     </select>
     <select class="inp inp-sel form-select" id="f-status2" onchange="renderSemua()" style="width:140px">
       <option value="">Semua Status</option><option value="lunas">Lunas</option><option value="belum">Belum Lunas</option>
@@ -746,7 +744,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Area *</label>
-          <select class="form-input form-select" id="n-area"><option value="SALES">SALES</option><option value="SOLO/SBY">SOLO/SBY</option></select>
+          <select class="form-input form-select" id="n-area">
+            <option value="SALES">SALES</option>
+            <option value="SOLO/SBY">SOLO/SBY</option>
+            <option value="BOGOR">BOGOR</option>
+            <option value="JAKARTA">JAKARTA</option>
+          </select>
         </div>
         <div class="form-group">
           <label class="form-label">Nama Supplier *</label>
@@ -1171,6 +1174,15 @@ const isOverdue=d=>{
 const today=()=>new Date().toISOString().slice(0,10);
 const uid=()=>Date.now()+'_'+Math.random().toString(36).slice(2,6);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// Helper: warna badge per area
+const getAreaBadgeClass=area=>{
+  const a=(area||'').toUpperCase();
+  if(a==='SALES')return 'badge-blue';
+  if(a==='SOLO/SBY')return 'badge-purple';
+  if(a==='BOGOR')return 'badge-teal';
+  if(a==='JAKARTA')return 'badge-amber';
+  return 'badge-gray';
+};
 const escAttr=s=>String(s==null?'':s).replace(/'/g,"\\'").replace(/"/g,'&quot;');
 const getRek=name=>{
   if(!name)return null;
@@ -1591,7 +1603,7 @@ function renderRencana(){
     const statusBadge=d.akanBayar===0?'<span class="badge badge-gray">Skip</span>'
       :d.akanBayar===d.sisa?'<span class="badge badge-green">Lunas</span>'
       :'<span class="badge badge-amber">Cicil</span>';
-    const areaBadge=`<span class="badge ${d.area==='SALES'?'badge-blue':'badge-purple'}">${d.area}</span>`;
+    const areaBadge=`<span class="badge ${getAreaBadgeClass(d.area)}">${esc(d.area||'')}</span>`;
     const safeId=esc(d.notaId);
     return`<tr data-row-id="${safeId}">
       <td class="row-supplier"><strong>${esc(d.nama)}</strong></td>
@@ -1771,11 +1783,47 @@ function rencanaShowReport(){
 }
 
 function laporanPrint(){
-  document.body.classList.add('printing-laporan');
-  setTimeout(()=>{
-    window.print();
-    setTimeout(()=>document.body.classList.remove('printing-laporan'),500);
-  },100);
+  // Ambil konten laporan
+  const body=document.getElementById('laporan-body');
+  if(!body||!body.innerHTML.trim()){
+    toast('Laporan kosong, generate dulu','error');
+    return;
+  }
+  const laporanHtml=body.innerHTML;
+  // Ambil semua CSS dari halaman saat ini
+  let allCss='';
+  document.querySelectorAll('style').forEach(s=>{allCss+=s.innerHTML+'\n'});
+  // Buka window baru
+  const w=window.open('','_blank','width=900,height=700');
+  if(!w){
+    toast('Browser memblokir popup. Aktifkan popup untuk site ini','error');
+    return;
+  }
+  // Hindari close-script di dalam template literal — pakai concat string
+  const printScript='<'+'script>window.addEventListener("load",function(){setTimeout(function(){window.print()},300)});</'+'script>';
+  const printCss=`
+body{background:#fff!important;color:#1a2332!important;font-family:'DM Sans',-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;margin:0;padding:0}
+.laporan-doc{max-width:100%;padding:18px 22px}
+@media print{
+  @page{margin:1.2cm 0.8cm;size:A4}
+  body{padding:0}
+  .laporan-doc{padding:8px 0!important}
+  .laporan-bank-section,.laporan-tbl tr{page-break-inside:avoid}
+  .no-print-window{display:none!important}
+}
+.no-print-window{position:fixed;top:8px;right:8px;display:flex;gap:8px;z-index:1000}
+.no-print-window button{padding:8px 14px;background:#1d6ddc;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:500}
+.no-print-window button.close-btn{background:#5b6478}
+.no-print-window button:hover{opacity:0.9}
+`;
+  const fullHtml='<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>Laporan Setoran ke Bank</title>'+
+    '<style>'+allCss+printCss+'</style></head>'+
+    '<body><div class="no-print-window">'+
+    '<button onclick="window.print()">🖨️ Print</button>'+
+    '<button class="close-btn" onclick="window.close()">✕ Tutup</button>'+
+    '</div>'+laporanHtml+printScript+'</body></html>';
+  w.document.write(fullHtml);
+  w.document.close();
 }
 
 // ===== REK CARD HTML =====
@@ -2023,7 +2071,7 @@ function renderBelumPage(){
     const noRek=r.no_rek||(rek?.no_rek)||'';
     const namaRek=r.nama_rek||(rek?.nama_rek)||'';
     const badge=r.lunas?'<span class="badge badge-green">✓ Lunas</span>':r.sisa>0?'<span class="badge badge-red">Sisa</span>':'<span class="badge badge-amber">Belum</span>';
-    const areaBadge=`<span class="badge ${r.area==='SALES'?'badge-blue':'badge-purple'}">${r.area}</span>`;
+    const areaBadge=`<span class="badge ${getAreaBadgeClass(r.area)}">${esc(r.area||'')}</span>`;
     return`<tr>
       <td class="row-supplier"><strong>${r.nama}</strong></td>
       <td class="row-meta">${areaBadge} ${badge}</td>
@@ -2142,7 +2190,7 @@ function renderSemuaPage(){
     const noRek=r.no_rek||(rek?.no_rek)||'';
     const namaRek=r.nama_rek||(rek?.nama_rek)||'';
     const badge=r.lunas?'<span class="badge badge-green">Lunas</span>':r.sisa>0?'<span class="badge badge-red">Sisa</span>':'<span class="badge badge-amber">Belum</span>';
-    const areaBadge=`<span class="badge ${r.area==='SALES'?'badge-blue':'badge-purple'}">${r.area}</span>`;
+    const areaBadge=`<span class="badge ${getAreaBadgeClass(r.area)}">${esc(r.area||'')}</span>`;
     return`<tr>
       <td class="row-supplier"><strong>${r.nama}</strong></td>
       <td class="row-meta">${areaBadge} ${badge}</td>
@@ -2496,7 +2544,7 @@ function bcShowDetail(){
   document.getElementById('bc-sup-name').textContent=r.nama;
   const areaEl=document.getElementById('bc-sup-area');
   areaEl.textContent=r.area;
-  areaEl.className='badge '+(r.area==='SALES'?'badge-blue':'badge-purple');
+  areaEl.className='badge '+getAreaBadgeClass(r.area);
   // Tempo info
   const tempoEl=document.getElementById('bc-sup-tempo');
   if(r.tgl_tempo&&/^\d{4}-\d{2}-\d{2}$/.test(r.tgl_tempo)){
