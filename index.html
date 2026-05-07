@@ -159,6 +159,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .badge-blue{background:var(--blue-bg);color:var(--blue)}
 .badge-purple{background:var(--purple-bg);color:var(--purple)}
 .badge-teal{background:var(--teal-bg);color:var(--teal)}
+.badge-pink{background:rgba(244,114,182,.14);color:#f472b6}
 .badge-gray{background:var(--bg4);color:var(--text2)}
 .btn{display:inline-flex;align-items:center;gap:5px;padding:8px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:var(--font);transition:all .15s;white-space:nowrap}
 .btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:var(--blue2)}
@@ -301,6 +302,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .laporan-bank-header.lain{border-left-color:#5b6478;background:#eef2f7}
 .laporan-bank-name{font-size:13px;font-weight:700;letter-spacing:.4px}
 .laporan-bank-tot{font-size:13px;font-weight:700;color:#0a6e3f;font-family:var(--mono)}
+
+/* Section per area */
+.laporan-area-section{margin-top:14px;page-break-inside:avoid;border:1px solid #d8dee8;border-radius:6px;padding:10px 12px;background:#fafbfd}
+.laporan-area-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;padding-bottom:6px;border-bottom:1.5px solid #1d6ddc;gap:10px;flex-wrap:wrap}
+.laporan-area-title{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.laporan-area-emoji{font-size:14px}
+.laporan-area-name{font-size:14px;font-weight:800;color:#1a2332;letter-spacing:.5px;text-transform:uppercase}
+.laporan-area-count{font-size:11px;color:#5b6478;font-weight:400}
+.laporan-area-tot{font-size:15px;font-weight:800;color:#0a6e3f;font-family:var(--mono)}
+.laporan-area-mini{font-size:11px;color:#5b6478;margin-bottom:6px;padding:4px 8px;background:#fff;border-radius:4px;border:1px dashed #d8dee8;font-family:var(--mono)}
 .laporan-grand-total{margin-top:14px;padding:12px 14px;background:#0a6e3f;color:#fff;border-radius:6px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:15px}
 .laporan-grand-total .val{font-family:var(--mono);font-size:18px}
 .laporan-footer{margin-top:24px;padding-top:14px;border-top:1px solid #d8dee8;font-size:10.5px;color:#5b6478;text-align:center;font-style:italic}
@@ -322,6 +333,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   .laporan-meta{gap:10px}
   .laporan-grand-total{font-size:13px}
   .laporan-grand-total .val{font-size:15px}
+  .laporan-area-section{padding:8px 10px}
+  .laporan-area-name{font-size:13px}
+  .laporan-area-tot{font-size:13px}
+  .laporan-area-mini{font-size:10px}
 }
 
 /* BANK BREAKDOWN dalam banner */
@@ -545,7 +560,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <select class="inp inp-sel form-select" id="f-area" onchange="renderBelum()" style="width:120px">
       <option value="">Semua Area</option>
       <option value="SALES">SALES</option>
-      <option value="SOLO/SBY">SOLO/SBY</option>
+      <option value="SOLO">SOLO</option>
+      <option value="SURABAYA">SURABAYA</option>
       <option value="BOGOR">BOGOR</option>
       <option value="JAKARTA">JAKARTA</option>
     </select>
@@ -682,7 +698,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <select class="inp inp-sel form-select" id="f-area2" onchange="renderSemua()" style="width:130px">
       <option value="">Semua Area</option>
       <option value="SALES">SALES</option>
-      <option value="SOLO/SBY">SOLO/SBY</option>
+      <option value="SOLO">SOLO</option>
+      <option value="SURABAYA">SURABAYA</option>
       <option value="BOGOR">BOGOR</option>
       <option value="JAKARTA">JAKARTA</option>
     </select>
@@ -746,7 +763,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
           <label class="form-label">Area *</label>
           <select class="form-input form-select" id="n-area">
             <option value="SALES">SALES</option>
-            <option value="SOLO/SBY">SOLO/SBY</option>
+            <option value="SOLO">SOLO</option>
+      <option value="SURABAYA">SURABAYA</option>
             <option value="BOGOR">BOGOR</option>
             <option value="JAKARTA">JAKARTA</option>
           </select>
@@ -1178,7 +1196,8 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 const getAreaBadgeClass=area=>{
   const a=(area||'').toUpperCase();
   if(a==='SALES')return 'badge-blue';
-  if(a==='SOLO/SBY')return 'badge-purple';
+  if(a==='SOLO')return 'badge-purple';
+  if(a==='SURABAYA')return 'badge-pink';
   if(a==='BOGOR')return 'badge-teal';
   if(a==='JAKARTA')return 'badge-amber';
   return 'badge-gray';
@@ -1675,41 +1694,85 @@ function rencanaShowReport(){
   const week=autoWeekLabel(tgl);
   const total=eligible.reduce((a,d)=>a+d.akanBayar,0);
   const totalSisa=eligible.reduce((a,d)=>a+d.sisa,0);
-  // Kelompokkan per bank
-  const groups={BCA:[],BRI:[],BNI:[],Lainnya:[]};
+
+  // ===== KELOMPOKKAN PER AREA =====
+  const areaGroups={};
   eligible.forEach(d=>{
-    const bank=(d.bank||'').toUpperCase().trim();
-    if(bank==='BCA')groups.BCA.push(d);
-    else if(bank==='BRI')groups.BRI.push(d);
-    else if(bank==='BNI')groups.BNI.push(d);
-    else groups.Lainnya.push(d);
+    const area=(d.area||'LAINNYA').toUpperCase().trim()||'LAINNYA';
+    if(!areaGroups[area])areaGroups[area]=[];
+    areaGroups[area].push(d);
   });
-  // Sort tiap grup berdasarkan tempo
-  Object.keys(groups).forEach(k=>{
-    groups[k].sort((a,b)=>{
+  // Sort tiap area: tempo terdekat dulu
+  Object.keys(areaGroups).forEach(k=>{
+    areaGroups[k].sort((a,b)=>{
       if(a.tgl_tempo&&b.tgl_tempo)return a.tgl_tempo.localeCompare(b.tgl_tempo);
       if(a.tgl_tempo)return -1;
       if(b.tgl_tempo)return 1;
       return 0;
     });
   });
-  // Hitung breakdown per bank
+  // Hitung total & breakdown bank per area
+  const areaTotals={};
+  const areaBankBreakdown={};
+  Object.keys(areaGroups).forEach(k=>{
+    areaTotals[k]=areaGroups[k].reduce((a,d)=>a+d.akanBayar,0);
+    const bb={BCA:0,BRI:0,BNI:0,Lainnya:0};
+    areaGroups[k].forEach(d=>{
+      const bank=(d.bank||'').toUpperCase().trim();
+      if(bank==='BCA')bb.BCA+=d.akanBayar;
+      else if(bank==='BRI')bb.BRI+=d.akanBayar;
+      else if(bank==='BNI')bb.BNI+=d.akanBayar;
+      else bb.Lainnya+=d.akanBayar;
+    });
+    areaBankBreakdown[k]=bb;
+  });
+  // Urutkan area: nominal terbesar duluan
+  const sortedAreas=Object.keys(areaGroups).sort((a,b)=>areaTotals[b]-areaTotals[a]);
+
+  // ===== KELOMPOKKAN PER BANK =====
+  const bankGroups={BCA:[],BRI:[],BNI:[],Lainnya:[]};
+  eligible.forEach(d=>{
+    const bank=(d.bank||'').toUpperCase().trim();
+    if(bank==='BCA')bankGroups.BCA.push(d);
+    else if(bank==='BRI')bankGroups.BRI.push(d);
+    else if(bank==='BNI')bankGroups.BNI.push(d);
+    else bankGroups.Lainnya.push(d);
+  });
+  Object.keys(bankGroups).forEach(k=>{
+    bankGroups[k].sort((a,b)=>{
+      if(a.tgl_tempo&&b.tgl_tempo)return a.tgl_tempo.localeCompare(b.tgl_tempo);
+      if(a.tgl_tempo)return -1;
+      if(b.tgl_tempo)return 1;
+      return 0;
+    });
+  });
   const bankTotals={BCA:0,BRI:0,BNI:0,Lainnya:0};
-  Object.keys(groups).forEach(k=>{bankTotals[k]=groups[k].reduce((a,d)=>a+d.akanBayar,0)});
+  Object.keys(bankGroups).forEach(k=>{bankTotals[k]=bankGroups[k].reduce((a,d)=>a+d.akanBayar,0)});
 
   const now=new Date();
   const waktuCetak=now.toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
 
-  // Build tabel per bank
-  const bankSection=(name,cls,items,emoji)=>{
-    if(items.length===0)return '';
+  // Helper: build mini bank breakdown text
+  const miniBankText=(bb)=>{
+    const parts=[];
+    if(bb.BCA>0)parts.push(`BCA ${fmtRp(bb.BCA)}`);
+    if(bb.BRI>0)parts.push(`BRI ${fmtRp(bb.BRI)}`);
+    if(bb.BNI>0)parts.push(`BNI ${fmtRp(bb.BNI)}`);
+    if(bb.Lainnya>0)parts.push(`Lainnya ${fmtRp(bb.Lainnya)}`);
+    return parts.join(' · ');
+  };
+
+  // Helper: build tabel detail (untuk area & bank)
+  const buildTable=(items,showArea)=>{
     const rows=items.map((d,i)=>{
       const status=d.akanBayar===d.sisa?'<strong style="color:#0a6e3f">LUNAS</strong>':'<strong style="color:#b87a00">CICIL</strong>';
       const tempoTxt=d.tgl_tempo?fmtDate(d.tgl_tempo):'-';
+      const bankCell=showArea?'':`<td><strong>${esc(d.bank||'-')}</strong></td>`;
+      const areaCell=showArea?`<td>${esc(d.area||'-')}</td>`:'';
       return `<tr>
         <td class="center">${i+1}</td>
         <td><strong>${esc(d.nama)}</strong></td>
-        <td>${esc(d.area||'-')}</td>
+        ${areaCell}${bankCell}
         <td class="center">${tempoTxt}</td>
         <td class="right">${fmtRp(d.sisa)}</td>
         <td class="right" style="font-weight:700">${fmtRp(d.akanBayar)}</td>
@@ -1718,25 +1781,52 @@ function rencanaShowReport(){
         <td>${esc(d.nama_rek||'-')}</td>
       </tr>`;
     }).join('');
+    const colArea=showArea?'<th style="width:65px">Area</th>':'<th style="width:55px">Bank</th>';
+    return `<table class="laporan-tbl">
+      <thead><tr>
+        <th class="center" style="width:28px">No</th>
+        <th>Supplier</th>
+        ${colArea}
+        <th class="center" style="width:70px">Tempo</th>
+        <th class="right" style="width:105px">Sisa</th>
+        <th class="right" style="width:110px">Akan Bayar</th>
+        <th class="center" style="width:55px">Status</th>
+        <th style="width:110px">No. Rek</th>
+        <th>Nama Pemilik</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  };
+
+  // Build section per area
+  const areaSections=sortedAreas.map(area=>{
+    const items=areaGroups[area];
+    const total=areaTotals[area];
+    const bb=areaBankBreakdown[area];
+    const miniBank=miniBankText(bb);
+    return `<div class="laporan-area-section">
+      <div class="laporan-area-header">
+        <div class="laporan-area-title">
+          <span class="laporan-area-emoji">📍</span>
+          <span class="laporan-area-name">${esc(area)}</span>
+          <span class="laporan-area-count">— ${items.length} supplier</span>
+        </div>
+        <div class="laporan-area-tot">${fmtRp(total)}</div>
+      </div>
+      ${miniBank?`<div class="laporan-area-mini">${miniBank}</div>`:''}
+      ${buildTable(items,false)}
+    </div>`;
+  }).join('');
+
+  // Build section per bank (ringkas — tanpa detail tabel, hanya ringkasan)
+  const bankSection=(name,cls,items,emoji)=>{
+    if(items.length===0)return '';
     return `<div class="laporan-bank-section">
       <div class="laporan-bank-header ${cls}">
         <span class="laporan-bank-name">${emoji} ${name} <span style="font-weight:400;font-size:11px;color:#5b6478">— ${items.length} supplier</span></span>
         <span class="laporan-bank-tot">${fmtRp(bankTotals[name])}</span>
       </div>
-      <table class="laporan-tbl">
-        <thead><tr>
-          <th class="center" style="width:30px">No</th>
-          <th>Supplier</th>
-          <th style="width:60px">Area</th>
-          <th class="center" style="width:75px">Tempo</th>
-          <th class="right" style="width:110px">Sisa</th>
-          <th class="right" style="width:110px">Akan Bayar</th>
-          <th class="center" style="width:60px">Status</th>
-          <th style="width:115px">No. Rek</th>
-          <th>Nama Pemilik</th>
-        </tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
+      ${buildTable(items,true)}
     </div>`;
   };
 
@@ -1749,19 +1839,22 @@ function rencanaShowReport(){
       <div class="laporan-meta-item"><div class="lbl">Dicetak</div><div class="val">${esc(waktuCetak)}</div></div>
     </div>
 
-    <h2>Ringkasan Per Bank</h2>
+    <h2>Ringkasan Total Setoran</h2>
     <div class="laporan-summary">
-      <div class="laporan-sum-card"><div class="lbl">🟦 BCA</div><div class="val">${fmtRp(bankTotals.BCA)}</div></div>
-      <div class="laporan-sum-card"><div class="lbl">🟦 BRI</div><div class="val">${fmtRp(bankTotals.BRI)}</div></div>
-      <div class="laporan-sum-card"><div class="lbl">🟧 BNI</div><div class="val">${fmtRp(bankTotals.BNI)}</div></div>
-      <div class="laporan-sum-card"><div class="lbl">🏦 Lainnya</div><div class="val">${fmtRp(bankTotals.Lainnya)}</div></div>
+      <div class="laporan-sum-card tot"><div class="lbl">🟦 BCA</div><div class="val">${fmtRp(bankTotals.BCA)}</div></div>
+      <div class="laporan-sum-card tot"><div class="lbl">🟦 BRI</div><div class="val">${fmtRp(bankTotals.BRI)}</div></div>
+      <div class="laporan-sum-card tot"><div class="lbl">🟧 BNI</div><div class="val">${fmtRp(bankTotals.BNI)}</div></div>
+      <div class="laporan-sum-card tot"><div class="lbl">🏦 Lainnya</div><div class="val">${fmtRp(bankTotals.Lainnya)}</div></div>
     </div>
 
-    <h2>Rincian Per Bank</h2>
-    ${bankSection('BCA','bca',groups.BCA,'🟦')}
-    ${bankSection('BRI','bri',groups.BRI,'🟦')}
-    ${bankSection('BNI','bni',groups.BNI,'🟧')}
-    ${bankSection('Lainnya','lain',groups.Lainnya,'🏦')}
+    <h2>📍 Rincian Per Area</h2>
+    ${areaSections}
+
+    <h2>🏦 Rincian Per Bank</h2>
+    ${bankSection('BCA','bca',bankGroups.BCA,'🟦')}
+    ${bankSection('BRI','bri',bankGroups.BRI,'🟦')}
+    ${bankSection('BNI','bni',bankGroups.BNI,'🟧')}
+    ${bankSection('Lainnya','lain',bankGroups.Lainnya,'🏦')}
 
     <div class="laporan-grand-total">
       <span>TOTAL SETORAN ${fmtDate(tgl)}</span>
@@ -1875,7 +1968,8 @@ function renderStatsSemua(){
     <div class="stat"><div class="stat-label">Total Nota</div><div class="stat-val blue">${nota.length}</div></div>
     <div class="stat"><div class="stat-label">Total Nominal</div><div class="stat-val purple" style="font-size:15px">${fmtRp(total)}</div></div>
     <div class="stat"><div class="stat-label">SALES</div><div class="stat-val">${nota.filter(r=>r.area==='SALES').length}</div></div>
-    <div class="stat"><div class="stat-label">SOLO/SBY</div><div class="stat-val">${nota.filter(r=>r.area==='SOLO/SBY').length}</div></div>`;
+    <div class="stat"><div class="stat-label">SOLO</div><div class="stat-val">${nota.filter(r=>r.area==='SOLO').length}</div></div>
+    <div class="stat"><div class="stat-label">SURABAYA</div><div class="stat-val">${nota.filter(r=>r.area==='SURABAYA').length}</div></div>`;
 }
 function renderStatsRek(){
   const all=Object.keys(rekMap);
@@ -2819,6 +2913,9 @@ async function pullFromCloud(){
       rekMap={};
       rekRes.data.forEach(r=>{rekMap[r.nama]={bank:r.bank||'',no_rek:r.no_rek||'',nama_rek:r.nama_rek||''}});
     }
+    // Migrasi area SOLO/SBY → SOLO untuk data dari cloud
+    const migrated=migrateAreaSoloSby();
+    if(migrated>0){scheduleSync()} // push balik ke cloud kalau ada perubahan
     setSyncStatus('synced','data terbaru');
     return true;
   }catch(e){console.error('Pull failed',e);setSyncStatus('error');return false}
@@ -3009,10 +3106,28 @@ function rencanaPrint(){
 
 // ===== INIT =====
 let _appInitialized=false;
+
+// Migrasi area SOLO/SBY → SOLO (one-time, idempotent)
+function migrateAreaSoloSby(){
+  let migrated=0;
+  if(Array.isArray(nota)){
+    nota.forEach(r=>{
+      if(r&&r.area==='SOLO/SBY'){r.area='SOLO';migrated++}
+    });
+  }
+  if(migrated>0){
+    console.log(`[migrasi] ${migrated} nota SOLO/SBY → SOLO`);
+    return migrated;
+  }
+  return 0;
+}
+
 async function initApp(){
   if(_appInitialized)return;
   _appInitialized=true;
   loadDataLocal();
+  // Migrasi area SOLO/SBY → SOLO untuk data lama
+  const migrated=migrateAreaSoloSby();
   // Render with local first
   renderStatsBelum();renderBelum();
   initWeekFilter();renderStatsBayar();renderBayar();
@@ -3021,6 +3136,8 @@ async function initApp(){
   updateDataLists();
   document.getElementById('n-tgl-nota').value=today();
   document.getElementById('b-tgl').value=today();
+  // Save kalau ada migrasi (akan trigger sync)
+  if(migrated>0)saveData();
   // Connect to Supabase and sync
   if(initSupabase()){
     setSyncStatus('syncing','konek...');
